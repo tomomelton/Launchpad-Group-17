@@ -1,0 +1,82 @@
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-map {
+    order: -1;
+  }
+
+  .about-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .foodbanks-section .about-inner .foodbanks-img {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --page-padding: 1.25rem;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  nav {
+    position: relative;
+    height: auto;
+    padding: 0.5rem var(--page-padding);
+    flex-wrap: wrap;
+  }
+
+  .nav-menu {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    padding: 0.5rem 0 1rem;
+  }
+
+  .nav-menu.open {
+    display: flex;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-links a {
+    padding: 0.7rem 1rem;
+  }
+
+  .lang-dropdown {
+    width: 100%;
+  }
+
+  .nav-lang {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .lang-menu {
+    left: 0;
+    right: 0;
+  }
+
+  .hero-text p {
+    max-width: none;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
