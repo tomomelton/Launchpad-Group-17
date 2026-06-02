@@ -4,7 +4,12 @@
   "private": true,
   "description": "Food Bank Finder static site",
   "license": "ISC",
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
     "leaflet": "^1.9.4"
   }
 }
