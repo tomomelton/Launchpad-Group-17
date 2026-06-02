@@ -118,7 +118,8 @@
   );
 }
 
-.left-inner {
+.left-inner,
+.right-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
@@ -134,12 +135,14 @@
   margin-bottom: 0.5rem;
 }
 
-.left-inner h2 {
+.left-inner h2,
+.right-inner h2 {
   font-family: var(--font-heading);
   font-size: 2rem;
   margin-bottom: 1rem;
 }
-.left-inner p {
+.left-inner p,
+.right-inner p {
   color: var(--ink-mid);
   margin-bottom: 1rem;
 }

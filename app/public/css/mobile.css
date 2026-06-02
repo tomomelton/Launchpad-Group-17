@@ -1,5 +1,3 @@
-
-
 @media (max-width: 768px) {
   :root {
     --page-padding: 1.25rem;
@@ -50,6 +48,10 @@
     right: 0;
   }
 
+  .hero, .left-inner, .right-inner {
+    grid-template-columns: 1fr;
+  }
+
   .hero-text p {
     max-width: none;
   }
@@ -62,5 +64,15 @@
   .footer-links {
     flex-wrap: wrap;
     justify-content: center;
+  }
+
+  .about-heading {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .about-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 }
