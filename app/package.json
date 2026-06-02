@@ -4,7 +4,14 @@
   "private": true,
   "description": "Food Bank Finder static site",
   "license": "ISC",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
   "dependencies": {
-    "leaflet": "^1.9.4"
+    "express": "^5.2.1",
+    "leaflet": "^1.9.4",
+    "nodemon": "^3.1.14"
   }
 }

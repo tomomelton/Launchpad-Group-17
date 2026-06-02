@@ -1,20 +1,4 @@
-@media (max-width: 900px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
 
-  .hero-map {
-    order: -1;
-  }
-
-  .about-inner {
-    grid-template-columns: 1fr;
-  }
-
-  .foodbanks-section .about-inner .foodbanks-img {
-    order: -1;
-  }
-}
 
 @media (max-width: 768px) {
   :root {
