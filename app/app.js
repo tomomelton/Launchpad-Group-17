@@ -7,5 +7,5 @@ const port = 3030;
 app.use(express.static('public'))
 
 app.listen(port, () => {
-    console.log("port is running");
+    console.log("running on port " + port);
 });
