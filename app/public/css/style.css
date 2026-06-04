@@ -270,3 +270,7 @@ button.pill {
 .pill-option span {
   flex: 1;
 }
+
+.foodbank-list {
+  padding-left: 2rem;
+}
