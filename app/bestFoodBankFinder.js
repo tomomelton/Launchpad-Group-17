@@ -22,7 +22,7 @@ const { getWalkingDistanceAndTime } = require('./distance');
 
 class bestFoodBankFinder {
   constructor({ 
-    data_path = path.resolve(__dirname, 'foodBankData.json'), 
+    data_path = path.resolve(__dirname, './js/foodBankData.json'), 
     update_script = path.resolve(__dirname, 'updateJson.js') } = {}) {
     this.data_path = data_path;
     this.update_script = update_script;
@@ -51,7 +51,7 @@ class bestFoodBankFinder {
   }
 
   // Return the best-matching bank or null; lower score is better.
-  findBest(user_lat, user_lon, preferences = []) {
+  async findBest(user_lat, user_lon, preferences = []) {
     this.runUpdateScript();
     this.loadData();
 
