@@ -1,7 +1,7 @@
 /**
  * ###############################################################################
  * 
- * File        : foodBankRanker.js
+ * File        : bestFoodBankFinder.js
  * 
  * Date        : Wednesday 3rd June 2026
  * 
@@ -19,7 +19,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-class foodBankRanker {
+class bestFoodBankFinder {
   constructor({ 
     data_path = path.resolve(__dirname, 'foodBankData.json'), 
     update_script = path.resolve(__dirname, 'updateJson.js') } = {}) {
@@ -95,4 +95,4 @@ class foodBankRanker {
   }
 }
 
-module.exports = foodBankRanker
+module.exports = bestFoodBankFinder
