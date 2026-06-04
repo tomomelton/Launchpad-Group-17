@@ -62,7 +62,7 @@ class bestFoodBankFinder {
     let best_match = this.food_banks[0];
     let lowest_score = Infinity;
 
-    for (const bank of this.foodBanks) {
+    for (const bank of this.food_banks) {
 
       try {
         const route = await getWalkingDistanceAndTime(user_lat, user_lon, 
