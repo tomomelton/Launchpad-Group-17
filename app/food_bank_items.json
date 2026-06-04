@@ -1,0 +1,55 @@
+{
+  "staple_foods": [
+    "Breakfast cereal or porridge",
+    "Pasta, rice, or noodles",
+    "Pasta sauce",
+    "Tinned tomatoes",
+    "Instant mash or potatoes",
+    "Baked beans",
+    "Pulses (lentils, chickpeas, etc.)"
+  ],
+  "protein_sources": [
+    "Tinned meat",
+    "Tinned fish (e.g. tuna)",
+    "Vegetarian main meals",
+    "Tinned beans and pulses"
+  ],
+  "fruit_and_vegetables": [
+    "Tinned vegetables",
+    "Tinned fruit",
+    "Fresh fruit and vegetables (when available)"
+  ],
+  "drinks": [
+    "Tea",
+    "Coffee",
+    "Long-life (UHT) milk",
+    "Long-life fruit juice or squash"
+  ],
+  "snacks_and_desserts": [
+    "Biscuits",
+    "Rice pudding or custard",
+    "Snacks and treats",
+    "Chocolate or sweets (when available)"
+  ],
+  "household_and_personal_care": [
+    "Soap",
+    "Shampoo",
+    "Toothpaste and toothbrushes",
+    "Toilet paper",
+    "Washing-up liquid",
+    "Laundry detergent",
+    "Sanitary products"
+  ],
+  "baby_and_family_items": [
+    "Nappies",
+    "Baby wipes",
+    "Baby food or formula (depending on availability)"
+  ],
+  "dietary_requirements_supported": [
+    "Vegetarian",
+    "Vegan",
+    "Gluten-free",
+    "Halal",
+    "Dairy-free"
+  ]
+}
