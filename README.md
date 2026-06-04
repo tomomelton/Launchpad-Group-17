@@ -1,1 +1,0 @@
-# Launchpad Group 17
