@@ -1,0 +1,98 @@
+/**
+ * ###############################################################################
+ * 
+ * File        : foodBankRanker.js
+ * 
+ * Date        : Wednesday 3rd June 2026
+ * 
+ * Author      : Liam Pochin
+ * 
+ * Description : Loads foodBankData.json to find the shortest walking distance
+ *               food bank with the most user-specified items in surplus.
+ *  
+ * History     : 03/06/2026 - v1.0
+ * 
+ * ###############################################################################
+ */
+
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+
+class foodBankRanker {
+  constructor({ 
+    data_path = path.resolve(__dirname, 'foodBankData.json'), 
+    update_script = path.resolve(__dirname, 'updateJson.js') } = {}) {
+    this.data_path = data_path;
+    this.update_script = update_script;
+    this.food_banks = [];
+  }
+
+  // Load JSON data into this.food_banks; on error preserve an empty array.
+  loadData() {
+    try {
+      const raw_data = fs.readFileSync(this.data_path, 'utf8');
+      this.food_banks = JSON.parse(rawData);
+    } catch (error) {
+      console.error('Failed to load food bank data:', error.message);
+      this.food_banks = [];
+    }
+  }
+
+  // Run external update script; failure is non-fatal (use existing data).
+  runUpdateScript() {
+    try {
+      // stdio: 'ignore' suppresses output to not clutter the console.
+      execSync(`node "${this.updateScript}"`, { stdio: 'ignore' });
+    } catch (err) {
+      console.warn('Update script failed, using existing data.');
+    }
+  }
+
+  // Return the best-matching bank or null; lower score is better.
+  findBest(preferences = []) {
+    this.runUpdateScript();
+    this.loadData();
+
+    if (!this.food_banks || this.food_banks.length === 0) {
+      return null;
+    }
+
+    let best_match = this.food_banks[0];
+    let lowest_score = Infinity;
+
+    for (const bank of this.foodBanks) {
+      // Treat missing distance as very far.
+      let calculated_score = Number.isFinite(bank.distance) 
+        ? bank.distance 
+        : Infinity; 
+
+      const bank_excess = Array.isArray(bank.excess) ? bank.excess : [];
+      const bank_needs = Array.isArray(bank.needs) ? bank.needs : [];
+
+      // Preference scoring: surplus reduces score, need increases it.
+      for (const item of preferences) {
+        if (bank_excess.includes(item)) {
+          calculated_score -= 1;
+        } else if (bankNeeds.includes(item)) {
+          calculated_score += 2;
+        }
+      }
+
+      if (calculated_score < lowest_score) {
+        lowest_score = calculated_score;
+        best_match = bank;
+      }
+    }
+
+    return best_match;
+  }
+
+  // Helper utility to safely check membership.
+  static includes(arr, item) {
+    if (!Array.isArray(arr)) return false;
+    return arr.includes(item);
+  }
+}
+
+module.exports = foodBankRanker
