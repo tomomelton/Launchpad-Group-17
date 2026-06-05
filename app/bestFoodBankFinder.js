@@ -15,14 +15,15 @@
  * ###############################################################################
  */
 
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
 const { exec_sync } = require('child_process');
 const { getWalkingDistanceAndTime } = require('./distance');
+const { response } = require('express');
 
 class bestFoodBankFinder {
   constructor({ 
-    data_path = path.resolve(__dirname, './js/foodBankData.json'), 
+    data_path = path.resolve(__dirname, 'foodBankData.json'),
     update_script = path.resolve(__dirname, 'updateJson.js') } = {}) {
     this.data_path = data_path;
     this.update_script = update_script;
@@ -30,10 +31,13 @@ class bestFoodBankFinder {
   }
 
   // Load JSON data into this.food_banks; on error preserve an empty array.
-  loadData() {
+  async loadData() {
     try {
-      const raw_data = fs.readFileSync(this.data_path, 'utf8');
-      this.food_banks = JSON.parse(rawData);
+      const raw_data = await fs.readFile(this.data_path, 'utf8');
+      this.food_banks = JSON.parse(raw_data);
+
+      // console.log(this.food_banks)
+
     } catch (error) {
       console.error('Failed to load food bank data:', error.message);
       this.food_banks = [];
@@ -43,8 +47,9 @@ class bestFoodBankFinder {
   // Run external update script; failure is non-fatal (use existing data).
   runUpdateScript() {
     try {
-      // stdio: 'ignore' suppresses output to not clutter the console.
-      exec_sync(`node "${this.update_script}"`, { stdio: 'ignore' });
+
+      require("./updateJson")
+
     } catch (err) {
       console.warn('Update script failed, using existing data.');
     }
