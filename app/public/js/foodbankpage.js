@@ -15,57 +15,58 @@
  * ###############################################################################
  */
 
-const button = document.getElementById("search-button");
+document.addEventListener("DOMContentLoaded", () => {
 
-button.addEventListener("click", async () => {
+    const data = JSON.parse(localStorage.getItem("selectedFoodbank"));
 
-    const address = document.getElementById("address-field").value
-    try {
-        const coords = await getCoordinates(address)
+    if (data) {
+        
+        //####### Load Main Foodbank Details #######
+        document.getElementById("fb-header").textContent =
+            data.name;
 
-        const preferences = [] // Add user preferences
+        const addressParts = data.address.split(", ")
+        document.getElementById("fb-address").innerHTML =
+            "<b>Address: </b>" + addressParts[0] + ", " + addressParts[1];
 
-        fetch("/api/best-foodbanks", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                lat: coords.lat,
-                lng: coords.lng,
-                preferences: preferences
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
+        document.getElementById("fb-postcode").innerHTML =
+            "<b>Postcode: </b>" + data.postcode;
 
-            document.getElementById("fb-address")
-                        .textContent = "Address: " + data.address;
+        //####### Clear Placeholder Elements #######
+        document.querySelectorAll(".list-placeholder").forEach(element => {
+            element.remove();
         });
 
-    window.location.href="foodbanks.html"
+        //####### Load Foodbank Excess #######
+        const excessList = document.getElementById("excess-list")
 
-    }
-    catch (err) {
-        console.error(err.message)
-    }
+        data.excess.split(", ").forEach(item => {
+            let p = document.createElement("p");
+            p.textContent = item;
 
-    
-})
+            let li = document.createElement("li");
+            li.appendChild(p);
 
-// Created by ChatGPT (04/06/26 20:00)
-async function getCoordinates(address) {
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+            excessList.appendChild(li);
+        })
 
-    const response = await fetch(url);
-    const data = await response.json();
+        //####### Load Foodbank Needs #######
+        const needsList = document.getElementById("needs-list")
 
-    if (!data.length) {
-        throw new Error("No results found");
-    }
+        data.needs.split(", ").forEach(item => {
+            let p = document.createElement("p");
+            p.textContent = item;
 
-    return {
-        lat: parseFloat(data[0].lat),
-        lng: parseFloat(data[0].lon)
-    };
+            let li = document.createElement("li");
+            li.appendChild(p);
+
+            needsList.appendChild(li);
+        })
+
+        
+
+        
+        
 }
+
+})

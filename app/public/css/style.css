@@ -274,3 +274,7 @@ button.pill {
 .foodbank-list {
   padding-left: 2rem;
 }
+
+.foodbank-list li p {
+  margin: 5px
+}
