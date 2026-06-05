@@ -34,9 +34,11 @@ class bestFoodBankFinder {
   async loadData() {
     try {
       const raw_data = await fs.readFile(this.data_path, 'utf8');
-      this.food_banks = JSON.parse(raw_data);
-
-      // console.log(this.food_banks)
+      this.food_banks = JSON.parse(raw_data).map(bank => ({
+        ...bank,
+        latitude: Number(bank.latitude),
+        longitude: Number(bank.longitude)
+      }));
 
     } catch (error) {
       console.error('Failed to load food bank data:', error.message);
@@ -57,8 +59,8 @@ class bestFoodBankFinder {
 
   // Return the best-matching bank or null; lower score is better.
   async findBest(user_lat, user_lon, preferences = []) {
-    this.runUpdateScript();
-    this.loadData();
+    await this.runUpdateScript();
+    await this.loadData();
 
     if (!this.food_banks || this.food_banks.length === 0) {
       return null;
@@ -70,8 +72,13 @@ class bestFoodBankFinder {
     for (const bank of this.food_banks) {
 
       try {
-        const route = await getWalkingDistanceAndTime(user_lat, user_lon, 
-          bank.latitude, bank.longitude);
+
+        const route = await getWalkingDistanceAndTime(
+          Number(user_lat), 
+          Number(user_lon), 
+          Number(bank.latitude), 
+          Number(bank.longitude)
+        );
           bank.distance = route.distance;
       } catch (err) {
         bank.distance = Infinity;
@@ -92,7 +99,7 @@ class bestFoodBankFinder {
       for (const item of preferences) {
         if (bank_excess.includes(item)) {
           calculated_score -= 300;
-        } else if (bankNeeds.includes(item)) {
+        } else if (bank_needs.includes(item)) {
           calculated_score += 600;
         }
       }
@@ -113,4 +120,4 @@ class bestFoodBankFinder {
   }
 }
 
-module.exports = bestFoodBankFinder
+module.exports = { bestFoodBankFinder }

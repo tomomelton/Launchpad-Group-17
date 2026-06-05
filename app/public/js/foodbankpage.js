@@ -15,7 +15,6 @@
  * ###############################################################################
  */
 
-
 const button = document.getElementById("search-button");
 
 button.addEventListener("click", async () => {
@@ -23,23 +22,29 @@ button.addEventListener("click", async () => {
     const address = document.getElementById("address-field").value
     try {
         const coords = await getCoordinates(address)
-    
-        // Call your server endpoint
-        const response = await fetch('/api/find-best-foodbank', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+
+        const preferences = [] // Add user preferences
+
+        fetch("/api/best-foodbanks", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({
-                user_lat: coords.lat,
-                user_lon: coords.lng,
-                preferences: [] // Add user preferences here if needed
+                lat: coords.lat,
+                lng: coords.lng,
+                preferences: preferences
             })
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            document.getElementById("fb-address")
+                        .textContent = "Address: " + data.address;
         });
-        
-        const bestFoodBank = await response.json();
-        console.log(bestFoodBank);
 
+    window.location.href="foodbanks.html"
 
-    // window.location.href="foodbanks.html"
     }
     catch (err) {
         console.error(err.message)

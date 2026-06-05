@@ -2,22 +2,24 @@
 
 const express = require('express');
 const app = express()
-const bestFoodBankFinder = require('./bestFoodBankFinder')
+const { bestFoodBankFinder } = require('./bestFoodBankFinder')
 const port = 3030;
 
 app.use(express.static('public'))
 app.use(express.json());
 
+
 // Find Best Foodbank API Endpoint
-app.post('/api/find-best-foodbank', (req, res) => {
-  try {
-    const { user_lat, user_lon, preferences } = req.body;
+app.post("/api/best-foodbanks", async (req, res) => {
+
+    let {lat, lng, preferences} = req.body;
+
+    lat = Number(lat);
+    lng = Number(lng);
+
     const finder = new bestFoodBankFinder();
-    const result = finder.findBest(user_lat, user_lon, preferences);
+    const result = await finder.findBest(lat, lng, preferences);
     res.json(result);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 });
 
 app.listen(port, () => {
