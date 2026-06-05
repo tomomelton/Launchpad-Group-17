@@ -15,6 +15,9 @@
  * ###############################################################################
  */
 
+// import { useEffect } from "react";
+// import L from "leaflet";
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const data = JSON.parse(localStorage.getItem("selectedFoodbank"));
@@ -63,8 +66,29 @@ document.addEventListener("DOMContentLoaded", () => {
             needsList.appendChild(li);
         })
 
-        
+        //####### Load Map #######
+        const map = L.map('fb-map', {
+        center: [
+            data.latitude,
+            data.longitude
+        ],
+        zoom: 12
+        }); 
 
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([
+            data.latitude,
+            data.longitude
+        ]).addTo(map)
+            .bindPopup(
+                `${data.name}
+                <p id="adrs">${data.address}</p>
+                <style>#adrs{font-size: x-small}</style>`
+            )
+            .openPopup();
         
         
 }

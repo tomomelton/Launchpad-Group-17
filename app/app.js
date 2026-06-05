@@ -3,6 +3,7 @@
 const express = require('express');
 const app = express()
 const { bestFoodBankFinder } = require('./bestFoodBankFinder')
+const { locationMap } = require('./map')
 const port = 3030;
 
 app.use(express.static('public'))
