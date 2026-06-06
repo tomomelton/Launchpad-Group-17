@@ -15,9 +15,6 @@
  * ###############################################################################
  */
 
-// import { useEffect } from "react";
-// import L from "leaflet";
-
 document.addEventListener("DOMContentLoaded", () => {
 
     const data = JSON.parse(localStorage.getItem("selectedFoodbank"));

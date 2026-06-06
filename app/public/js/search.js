@@ -48,9 +48,6 @@ button.addEventListener("click", async () => {
 })
 
 
-
-
-
 // Created by ChatGPT (04/06/26 20:00)
 async function getCoordinates(address) {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
@@ -67,3 +64,5 @@ async function getCoordinates(address) {
         lng: parseFloat(data[0].lon)
     };
 }
+
+window.getCoords = getCoordinates

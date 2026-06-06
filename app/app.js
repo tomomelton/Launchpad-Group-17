@@ -1,6 +1,7 @@
 
 
 const express = require('express');
+const fs = require("fs");
 const app = express()
 const { bestFoodBankFinder } = require('./bestFoodBankFinder')
 const port = 3030;
@@ -21,6 +22,16 @@ app.post("/api/best-foodbanks", async (req, res) => {
     const result = await finder.findBest(lat, lng, preferences);
     res.json(result);
 });
+
+
+// Get List of Foodbanks
+app.get("/api/foodbank-data", (req, res) => {
+    const data = JSON.parse(
+        fs.readFileSync("./foodBankData.json", "utf8")
+    );
+    res.json(data)
+})
+
 
 app.listen(port, () => {
     console.log("running on port " + port);

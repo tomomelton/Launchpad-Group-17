@@ -6,6 +6,7 @@
     <title>Food Bank Finder</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Rubik:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/footer.css">
@@ -81,7 +82,7 @@
         </div>
 
         <div class="hero-map">
-          <div class="map-placeholder"></div>
+          <div class="map-placeholder" id="map"></div>
         </div>
       </div>
 
@@ -143,5 +144,7 @@
     <script src="js/nav.js"></script>
     <script src="js/dropdown.js"></script>
     <script src="js/search.js"></script>
+    <script src="js/loadMap.js" defer></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   </body>
 </html>
