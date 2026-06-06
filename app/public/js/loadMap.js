@@ -41,8 +41,12 @@ async function initMap() {
                     fb.latitude,
                     fb.longitude
                 ]).addTo(map)
-                    .bindPopup(fb.name)
-                }
+                    .bindPopup(
+                `${fb.name}
+                <p id="adrs">${fb.address}</p>
+                <style>#adrs{font-size: x-small}</style>`
+                )
+            }
         })
 }
 
