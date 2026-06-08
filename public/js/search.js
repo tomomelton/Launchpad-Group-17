@@ -56,6 +56,7 @@ button.addEventListener("click", async () => {
         }
 
         localStorage.setItem("selectedFoodbank", JSON.stringify(data));
+        localStorage.setItem("searchAddress", address);
         window.location.href = "foodbanks.html";
     }
     catch (err) {

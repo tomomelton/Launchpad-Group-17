@@ -34,6 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("fb-header").textContent =
             data.name;
 
+        const searchedAddress = localStorage.getItem("searchAddress");
+        if (searchedAddress) {
+            document.getElementById("fb-searched-address").innerHTML =
+                "<b>Showing results for: </b>" + searchedAddress;
+        }
+
         const addressParts = data.address.split(", ")
         document.getElementById("fb-address").innerHTML =
             "<b>Address: </b>" + addressParts[0] + ", " + addressParts[1];
