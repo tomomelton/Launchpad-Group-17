@@ -97,11 +97,13 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         };
 
-        const attachItemFilter = (inputElement, listElement) => {
+        const attachItemFilter = (inputElement, listElements) => {
             inputElement.addEventListener("input", () => {
                 const query = inputElement.value.trim().toLowerCase();
-                listElement.querySelectorAll(".item-card").forEach(card => {
-                    card.hidden = query && !card.dataset.item.includes(query);
+                listElements.forEach(listElement => {
+                    listElement.querySelectorAll(".item-card").forEach(card => {
+                        card.hidden = query && !card.dataset.item.includes(query);
+                    });
                 });
             });
         };
@@ -109,12 +111,12 @@ document.addEventListener("DOMContentLoaded", () => {
         //####### Load Foodbank Excess #######
         const excessList = document.getElementById("excess-list");
         renderItemGrid(data.excess, excessList, "No items currently in excess");
-        attachItemFilter(document.getElementById("excess-filter"), excessList);
 
         //####### Load Foodbank Needs #######
         const needsList = document.getElementById("needs-list");
         renderItemGrid(data.needs, needsList, "No items currently needed");
-        attachItemFilter(document.getElementById("needs-filter"), needsList);
+
+        attachItemFilter(document.getElementById("item-filter"), [excessList, needsList]);
 
         //####### Load Map #######
         const foodbankLatLng = [data.latitude, data.longitude];

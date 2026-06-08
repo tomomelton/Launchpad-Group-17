@@ -515,6 +515,7 @@ button.pill {
   align-items: center;
   gap: 0.45rem;
   min-width: 190px;
+  margin-bottom: 0.9rem;
   padding: 0.45rem 0.75rem;
   background: var(--white);
   border: 1px solid var(--border);
