@@ -16,18 +16,25 @@
  */
 
 const button = document.getElementById("search-button");
+const addressField = document.getElementById("address-field");
 
 button.addEventListener("click", async () => {
 
-    const address = document.getElementById("address-field").value
+    const address = addressField.value.trim();
+
+    if (!address) {
+        alert("Please enter an address or postcode.");
+        return;
+    }
+
+    button.disabled = true;
+    button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
     try {
+        const coords = await getCoordinates(address);
+        const preferences = []; // Add user preferences when UI is ready
 
-        const coords = await getCoordinates(address)
-
-        const preferences = [] // Add user preferences
-
-        fetch("/api/best-foodbanks", {
+        const response = await fetch("/api/best-foodbanks", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -35,17 +42,31 @@ button.addEventListener("click", async () => {
                 lng: coords.lng,
                 preferences
             })
-        })
-        .then(res => res.json())
-        .then(data => {
-            localStorage.setItem("selectedFoodbank", JSON.stringify(data));
-            window.location.href = "foodbanks.html";
         });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `Server error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data) {
+            throw new Error("No food bank found for this location.");
+        }
+
+        localStorage.setItem("selectedFoodbank", JSON.stringify(data));
+        window.location.href = "foodbanks.html";
     }
     catch (err) {
-        console.error(err.message)
+        console.error(err);
+        alert(err.message || "Something went wrong. Please try again.");
     }
-})
+    finally {
+        button.disabled = false;
+        button.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>';
+    }
+});
 
 
 // Created by ChatGPT (04/06/26 20:00)
@@ -56,7 +77,7 @@ async function getCoordinates(address) {
     const data = await response.json();
 
     if (!data.length) {
-        throw new Error("No results found");
+        throw new Error("No results found for that address. Please try a different postcode or address.");
     }
 
     return {
