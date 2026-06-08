@@ -34,10 +34,10 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("fb-header").textContent =
             data.name;
 
-        const searchedAddress = localStorage.getItem("searchAddress");
-        if (searchedAddress) {
+        const searchLocation = JSON.parse(localStorage.getItem("searchLocation") || "null");
+        if (searchLocation && searchLocation.resolvedAddress) {
             document.getElementById("fb-searched-address").innerHTML =
-                "<b>Showing results for: </b>" + searchedAddress;
+                "<b>Resolved location: </b>" + searchLocation.resolvedAddress;
         }
 
         const addressParts = data.address.split(", ")
@@ -54,7 +54,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("fb-time").innerHTML =
             "<b>Walking time: </b>" + walkMin + " min";
 
-        const directionsUrl = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(data.latitude + "," + data.longitude);
+        const directionsOrigin = searchLocation ? searchLocation.lat + "," + searchLocation.lng : "";
+        const directionsUrl = "https://www.google.com/maps/dir/?api=1" +
+            (directionsOrigin ? "&origin=" + encodeURIComponent(directionsOrigin) : "") +
+            "&destination=" + encodeURIComponent(data.latitude + "," + data.longitude) +
+            "&travelmode=walking";
         const directionsLi = document.createElement("li");
         directionsLi.innerHTML = '<a href="' + directionsUrl + '" target="_blank" class="btn" style="margin-top:0.5rem;display:inline-block;"><i class="fa-solid fa-location-arrow"></i> Get directions</a>';
         document.querySelector(".foodbank-list").appendChild(directionsLi);
@@ -107,11 +111,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         //####### Load Map #######
+        const foodbankLatLng = [data.latitude, data.longitude];
+        const searchLatLng = searchLocation ? [searchLocation.lat, searchLocation.lng] : null;
         const map = L.map('fb-map', {
-        center: [
-            data.latitude,
-            data.longitude
-        ],
+        center: searchLatLng || foodbankLatLng,
         zoom: 12
         }); 
 
@@ -119,16 +122,70 @@ document.addEventListener("DOMContentLoaded", () => {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        L.marker([
-            data.latitude,
-            data.longitude
-        ]).addTo(map)
+        const foodbankMarker = L.marker(foodbankLatLng).addTo(map)
             .bindPopup(
                 `${data.name}
                 <p id="adrs">${data.address}</p>
                 <style>#adrs{font-size: x-small}</style>`
-            )
-            .openPopup();
+            );
+
+        if (searchLatLng) {
+            const searchIcon = L.divIcon({
+                className: 'user-location-marker',
+                html: '<div style="background:#2f80ed;border:3px solid white;border-radius:50%;width:18px;height:18px;box-shadow:0 0 0 2px #2f80ed;"></div>',
+                iconSize: [18, 18],
+                iconAnchor: [9, 9]
+            });
+
+            const searchMarker = L.marker(searchLatLng, { icon: searchIcon }).addTo(map)
+                .bindPopup(
+                    `<b>Your resolved location</b><p id="resolved-adrs">${searchLocation.resolvedAddress}</p><style>#resolved-adrs{font-size:x-small}</style>`
+                );
+
+            const fallbackLine = L.polyline([searchLatLng, foodbankLatLng], {
+                color: '#2f80ed',
+                weight: 4,
+                opacity: 0.75,
+                dashArray: '8, 8'
+            });
+
+            const routeUrl = 'https://router.project-osrm.org/route/v1/foot/' +
+                searchLocation.lng + ',' + searchLocation.lat + ';' +
+                data.longitude + ',' + data.latitude +
+                '?overview=full&geometries=geojson';
+
+            fetch(routeUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Route request failed');
+                    return response.json();
+                })
+                .then(routeData => {
+                    if (!routeData.routes || !routeData.routes[0] || !routeData.routes[0].geometry) {
+                        throw new Error('No route geometry returned');
+                    }
+
+                    const routeLine = L.geoJSON(routeData.routes[0].geometry, {
+                        style: {
+                            color: '#2f80ed',
+                            weight: 5,
+                            opacity: 0.85
+                        }
+                    }).addTo(map);
+
+                    map.fitBounds(L.featureGroup([searchMarker, foodbankMarker, routeLine]).getBounds(), {
+                        padding: [30, 30]
+                    });
+                })
+                .catch(error => {
+                    console.error('Could not load walking route, showing straight-line fallback:', error);
+                    fallbackLine.addTo(map);
+                    map.fitBounds(L.featureGroup([searchMarker, foodbankMarker, fallbackLine]).getBounds(), {
+                        padding: [30, 30]
+                    });
+                });
+        } else {
+            foodbankMarker.openPopup();
+        }
         
         
 }
