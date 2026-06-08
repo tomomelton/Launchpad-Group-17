@@ -1,0 +1,19 @@
+{
+  "name": "website-structure",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Food Bank Finder static site",
+  "license": "ISC",
+  "main": "backend/main.js",
+  "scripts": {
+    "dev": "nodemon backend/main.js",
+    "start": "node backend/main.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "leaflet": "^1.9.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
