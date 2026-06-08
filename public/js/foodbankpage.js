@@ -35,12 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
             data.name;
 
         const searchLocation = JSON.parse(localStorage.getItem("searchLocation") || "null");
-        if (searchLocation && searchLocation.resolvedAddress) {
-            const resolvedCard = document.getElementById("fb-resolved-location");
-            const resolvedAddress = document.getElementById("fb-resolved-address");
-            resolvedAddress.textContent = searchLocation.resolvedAddress;
-            resolvedCard.hidden = false;
-        }
 
         const addressParts = data.address.split(", ")
         document.getElementById("fb-address").textContent =

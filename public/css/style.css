@@ -342,8 +342,24 @@ button.pill {
   margin: 5px
 }
 
-.result-actions {
-  margin-bottom: 0.75rem;
+.result-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 520px;
+  margin-bottom: 0.35rem;
+}
+
+.result-topbar .section-label {
+  margin: 0;
+}
+
+.btn-small {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.875rem;
+  margin-top: 0;
+  white-space: nowrap;
 }
 
 .btn-secondary {
@@ -357,8 +373,7 @@ button.pill {
   color: var(--dark-green-dk);
 }
 
-.foodbank-summary-card,
-.resolved-location-card {
+.foodbank-summary-card {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -369,24 +384,10 @@ button.pill {
   display: grid;
   gap: 1rem;
   max-width: 520px;
-  margin: 1.25rem 0 2rem;
+  margin: 0.75rem 0 2rem;
   padding: 1.25rem;
 }
 
-.resolved-location-card {
-  max-width: 520px;
-  margin: 0.75rem 0 1rem;
-  padding: 0.9rem 1rem;
-  background: var(--cream);
-  border-left: 5px solid #2f80ed;
-}
-
-.resolved-location-card p {
-  max-width: none;
-  margin: 0.25rem 0 0;
-  color: var(--ink);
-  font-weight: 700;
-}
 
 .summary-row {
   display: grid;
