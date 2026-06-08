@@ -890,3 +890,66 @@ button.pill {
     text-align: center;
   }
 }
+
+
+.address-search-wrap {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.address-autofill-hint {
+  max-width: none;
+  margin: 0;
+  color: var(--ink-light);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.selected-food-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-height: 0;
+}
+
+.selected-food-pill {
+  border: 1px solid rgba(31, 77, 58, 0.22);
+  background: var(--white);
+  color: var(--dark-green-dk);
+  box-shadow: 0 5px 14px rgba(26, 26, 26, 0.06);
+}
+
+.selected-food-pill:hover {
+  border-color: var(--dark-green);
+  background: var(--cream-green);
+}
+
+.selected-food-pill .fa-xmark {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.recent-foodbanks {
+  max-width: 560px;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 28px rgba(26, 26, 26, 0.06);
+}
+
+.recent-foodbanks h2 {
+  margin: 0 0 0.8rem;
+  color: var(--dark-green-dk);
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+}
+
+.recent-foodbank-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.recent-foodbank-card .recommendation-postcode span {
+  display: inline;
+}

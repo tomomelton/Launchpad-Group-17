@@ -44,6 +44,20 @@ function formatCategoryLabel(key) {
     });
 }
 
+function getCategoryIcon(categoryKey) {
+  var icons = {
+    staple_foods: 'fa-bowl-food',
+    protein_sources: 'fa-drumstick-bite',
+    fruit_and_vegetables: 'fa-carrot',
+    drinks: 'fa-mug-hot',
+    snacks_and_desserts: 'fa-cookie-bite',
+    household_and_personal_care: 'fa-pump-soap',
+    baby_and_family_items: 'fa-baby',
+    dietary_requirements_supported: 'fa-leaf'
+  };
+  return icons[categoryKey] || 'fa-box-open';
+}
+
 function buildCheckboxOption(categoryKey, item, index) {
   var label = document.createElement('label');
   label.className = 'pill-option';
@@ -52,6 +66,8 @@ function buildCheckboxOption(categoryKey, item, index) {
   input.name = categoryKey;
   input.type = 'checkbox';
   input.value = String(index);
+  input.dataset.itemLabel = item;
+  input.dataset.categoryIcon = getCategoryIcon(categoryKey);
 
   var span = document.createElement('span');
   span.textContent = item;
@@ -71,7 +87,7 @@ function buildCollapseSection(categoryKey, items) {
   trigger.setAttribute('aria-expanded', 'false');
 
   var title = document.createElement('span');
-  title.textContent = formatCategoryLabel(categoryKey);
+  title.innerHTML = '<i class="fa-solid ' + getCategoryIcon(categoryKey) + '" aria-hidden="true"></i> ' + formatCategoryLabel(categoryKey);
   trigger.appendChild(title);
 
   var chevron = document.createElement('i');
@@ -112,17 +128,14 @@ function buildFoodMenu(data) {
   }
 }
 
+function getSelectedInputs() {
+  return Array.prototype.slice.call(document.querySelectorAll('.food-dropdown input[type="checkbox"]:checked'));
+}
+
 function getSelectedPreferences() {
-  var checked = document.querySelectorAll('.food-dropdown input[type="checkbox"]:checked');
-  var preferences = [];
-
-  for (var i = 0; i < checked.length; i++) {
-    var label = checked[i].closest('label');
-    var span = label ? label.querySelector('span') : null;
-    preferences.push(span ? span.textContent.trim() : checked[i].value);
-  }
-
-  return preferences;
+  return getSelectedInputs().map(function (input) {
+    return input.dataset.itemLabel || input.value;
+  });
 }
 
 window.getSelectedPreferences = getSelectedPreferences;
@@ -130,17 +143,27 @@ window.getSelectedPreferences = getSelectedPreferences;
 function updateSelectedChips() {
   var chips = document.getElementById('selected-chips');
   if (!chips) return;
-  var prefs = getSelectedPreferences();
-  if (prefs.length === 0) {
-    chips.innerHTML = '';
-  } else {
-    chips.innerHTML = '<b>Selected:</b> ' + prefs.join(', ');
-  }
+
+  chips.innerHTML = '';
+  var selectedInputs = getSelectedInputs();
+
+  selectedInputs.forEach(function (input) {
+    var pill = document.createElement('button');
+    pill.type = 'button';
+    pill.className = 'pill selected-food-pill';
+    pill.setAttribute('aria-label', 'Remove ' + (input.dataset.itemLabel || input.value));
+    pill.innerHTML = '<i class="fa-solid ' + (input.dataset.categoryIcon || 'fa-box-open') + '" aria-hidden="true"></i><span>' + (input.dataset.itemLabel || input.value) + '</span><i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+    pill.addEventListener('click', function () {
+      input.checked = false;
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      updateSelectedChips();
+    });
+    chips.appendChild(pill);
+  });
 }
 
 window.updateSelectedChips = updateSelectedChips;
 
-// Watch for checkbox changes to update chips
 document.addEventListener('change', function(e) {
   if (e.target && e.target.closest('.food-dropdown')) {
     updateSelectedChips();
@@ -154,6 +177,7 @@ fetch('/api/food-bank-items')
   })
   .then(function (data) {
     buildFoodMenu(data);
+    updateSelectedChips();
   })
   .catch(function (error) {
     console.error('Could not load food items:', error);

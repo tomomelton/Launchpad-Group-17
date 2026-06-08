@@ -140,6 +140,24 @@
     padding: 0.55rem 0.8rem;
   }
 
+
+  .recent-foodbanks {
+    margin-top: 1.25rem;
+    padding: 1rem;
+  }
+
+  .recent-foodbank-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .selected-food-pills {
+    width: 100%;
+  }
+
+  .selected-food-pill {
+    max-width: 100%;
+  }
+
   .about-heading {
     font-size: 2rem;
     margin-bottom: 2rem;

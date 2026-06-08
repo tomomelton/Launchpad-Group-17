@@ -2,6 +2,9 @@
 header {
   position: sticky;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 1000;
   background: var(--dark-green-dk);
   border-bottom: 2px solid rgba(255, 255, 255, 0.95);
