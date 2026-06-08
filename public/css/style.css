@@ -386,7 +386,7 @@ button.pill {
   position: relative;
   z-index: 3;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.62);
+  background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: 0 12px 28px rgba(26, 26, 26, 0.06);
