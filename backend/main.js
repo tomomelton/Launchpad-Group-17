@@ -72,6 +72,14 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: "Internal server error" });
 });
 
+// Get food item categories for filter dropdown
+app.get("/api/food-bank-items", (req, res) => {
+    const data = JSON.parse(
+        fs.readFileSync("backend/data/food-bank-items.json", "utf8")
+    );
+    res.json(data)
+})
+
 
 app.listen(port, () => {
     console.log("Running on port " + port);

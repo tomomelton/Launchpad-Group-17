@@ -37,3 +37,25 @@ footer {
 .footer-links a:hover {
   color: var(--cream-green);
 }
+
+.footer-partners {
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.footer-logo-wrap {
+  background: var(--cream);
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.footer-logo-img {
+  display: block;
+  height: 72px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+}
