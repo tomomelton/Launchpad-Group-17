@@ -489,6 +489,25 @@ button.pill {
   margin-top: 0;
 }
 
+.item-search-panel {
+  max-width: 560px;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 28px rgba(26, 26, 26, 0.06);
+}
+
+.item-search-panel .item-section {
+  max-width: none;
+  margin-top: 1.25rem;
+}
+
+.item-search-panel .item-section:first-of-type {
+  margin-top: 0.25rem;
+}
+
 .item-section {
   max-width: 520px;
   margin-top: 1.5rem;
