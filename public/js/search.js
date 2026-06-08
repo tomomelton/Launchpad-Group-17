@@ -62,7 +62,7 @@ button.addEventListener("click", async () => {
 
     try {
         const coords = await getCoordinates(address);
-        const preferences = []; // Add user preferences when UI is ready
+        const preferences = window.getSelectedPreferences ? [] : window.getSelectedPreferences;
 
         const response = await fetch("/api/best-foodbanks", {
             method: "POST",
