@@ -18,6 +18,36 @@
 const button = document.getElementById("search-button");
 const addressField = document.getElementById("address-field");
 
+function saveAddressHistory(address) {
+    var history = JSON.parse(localStorage.getItem('addressHistory') || '[]');
+    history = history.filter(function(a) { return a !== address; });
+    history.unshift(address);
+    if (history.length > 5) history.pop();
+    localStorage.setItem('addressHistory', JSON.stringify(history));
+}
+
+function showAddressHistory() {
+    var history = JSON.parse(localStorage.getItem('addressHistory') || '[]');
+    var dropdown = document.getElementById('address-history');
+    if (!dropdown) return;
+    if (history.length === 0) {
+        dropdown.style.display = 'none';
+        return;
+    }
+    dropdown.innerHTML = '';
+    history.forEach(function(addr) {
+        var div = document.createElement('div');
+        div.textContent = addr;
+        div.style.cssText = 'padding:0.4rem 0.8rem;cursor:pointer;font-size:0.9rem;color:var(--ink-mid);border-bottom:1px solid var(--border);';
+        div.addEventListener('click', function() {
+            addressField.value = addr;
+            dropdown.style.display = 'none';
+        });
+        dropdown.appendChild(div);
+    });
+    dropdown.style.display = 'block';
+}
+
 button.addEventListener("click", async () => {
 
     const address = addressField.value.trim();
@@ -56,6 +86,7 @@ button.addEventListener("click", async () => {
         }
 
         localStorage.setItem("selectedFoodbank", JSON.stringify(data));
+        saveAddressHistory(address);
         window.location.href = "foodbanks.html";
     }
     catch (err) {
@@ -67,6 +98,8 @@ button.addEventListener("click", async () => {
         button.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>';
     }
 });
+
+addressField.addEventListener('focus', showAddressHistory);
 
 
 // Created by ChatGPT (04/06/26 20:00)
