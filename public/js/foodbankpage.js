@@ -41,6 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("fb-postcode").innerHTML =
             "<b>Postcode: </b>" + data.postcode;
 
+        const directionsUrl = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(data.latitude + "," + data.longitude);
+        const directionsLi = document.createElement("li");
+        directionsLi.innerHTML = '<a href="' + directionsUrl + '" target="_blank" class="btn" style="margin-top:0.5rem;display:inline-block;"><i class="fa-solid fa-location-arrow"></i> Get directions</a>';
+        document.querySelector(".foodbank-list").appendChild(directionsLi);
+
         //####### Clear Placeholder Elements #######
         document.querySelectorAll(".list-placeholder").forEach(element => {
             element.remove();
