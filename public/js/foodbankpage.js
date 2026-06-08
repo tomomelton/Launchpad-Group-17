@@ -122,7 +122,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const map = L.map('fb-map', {
         center: searchLatLng || foodbankLatLng,
         zoom: 12
-        }); 
+        });
+
+        setTimeout(() => map.invalidateSize(), 100);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -181,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     map.fitBounds(L.featureGroup([searchMarker, foodbankMarker, routeLine]).getBounds(), {
                         padding: [30, 30]
                     });
+                    setTimeout(() => map.invalidateSize(), 100);
                 })
                 .catch(error => {
                     console.error('Could not load walking route, showing straight-line fallback:', error);
@@ -188,9 +191,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     map.fitBounds(L.featureGroup([searchMarker, foodbankMarker, fallbackLine]).getBounds(), {
                         padding: [30, 30]
                     });
+                    setTimeout(() => map.invalidateSize(), 100);
                 });
         } else {
             foodbankMarker.openPopup();
+            setTimeout(() => map.invalidateSize(), 100);
         }
         
         
