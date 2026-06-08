@@ -119,6 +119,10 @@
           <li><a href="#">Contact</a></li>
         </ul>
         <span>© 2026 FoodBankFinder</span>
+        <div style="margin-top:1rem;">
+          <button type="button" onclick="document.body.classList.toggle('high-contrast');localStorage.setItem('highContrast',document.body.classList.contains('high-contrast'));" style="background:transparent;border:1px solid var(--border);padding:0.3rem 0.7rem;border-radius:6px;cursor:pointer;font-size:0.8rem;color:inherit;margin-right:0.5rem;">Toggle high contrast</button>
+          <button type="button" onclick="document.body.classList.toggle('large-text');localStorage.setItem('largeText',document.body.classList.contains('large-text'));" style="background:transparent;border:1px solid var(--border);padding:0.3rem 0.7rem;border-radius:6px;cursor:pointer;font-size:0.8rem;color:inherit;">Toggle large text</button>
+        </div>
       </div>
 
       <div class="footer-inner footer-partners">
@@ -133,5 +137,13 @@
     <script src="js/search.js"></script>
     <script src="js/loadMap.js" defer></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+      (function() {
+        var hc = localStorage.getItem('highContrast');
+        var lt = localStorage.getItem('largeText');
+        if (hc === 'true') document.body.classList.add('high-contrast');
+        if (lt === 'true') document.body.classList.add('large-text');
+      })();
+    </script>
   </body>
 </html>
