@@ -31,14 +31,14 @@
 
           <div class="lang-dropdown">
             <button class="nav-lang" type="button" onclick="document.querySelector('.lang-menu').classList.toggle('open')">
-              English <i class="fa-solid fa-chevron-down"></i>
+              <span id="lang-label">English</span> <i class="fa-solid fa-chevron-down"></i>
             </button>
             <div class="lang-menu">
-              <a href="#">English</a>
-              <a href="#">Français</a>
-              <a href="#">Español</a>
-              <a href="#">Polski</a>
-              <a href="#">Română</a>
+              <a href="#" onclick="setLanguage('English');return false;">English</a>
+              <a href="#" onclick="setLanguage('Français');return false;">Français</a>
+              <a href="#" onclick="setLanguage('Español');return false;">Español</a>
+              <a href="#" onclick="setLanguage('Polski');return false;">Polski</a>
+              <a href="#" onclick="setLanguage('Română');return false;">Română</a>
             </div>
           </div>
         </div>
@@ -133,5 +133,17 @@
     <script src="js/search.js"></script>
     <script src="js/loadMap.js" defer></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+      function setLanguage(lang) {
+        document.getElementById('lang-label').textContent = lang;
+        localStorage.setItem('preferredLanguage', lang);
+        document.querySelector('.lang-menu').classList.remove('open');
+        alert('Language set to ' + lang + ' (full translation coming soon)');
+      }
+      (function() {
+        var saved = localStorage.getItem('preferredLanguage');
+        if (saved) document.getElementById('lang-label').textContent = saved;
+      })();
+    </script>
   </body>
 </html>
