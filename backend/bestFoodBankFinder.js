@@ -34,7 +34,13 @@ class bestFoodBankFinder {
       this.food_banks = JSON.parse(raw_data).map(bank => ({
         ...bank,
         latitude: Number(bank.latitude),
-        longitude: Number(bank.longitude)
+        longitude: Number(bank.longitude),
+        excess: typeof bank.excess === 'string' && bank.excess.trim()
+          ? bank.excess.split(', ')
+          : [],
+        needs: typeof bank.needs === 'string' && bank.needs.trim()
+          ? bank.needs.split(', ')
+          : []
       }));
 
     } catch (error) {
@@ -86,8 +92,8 @@ class bestFoodBankFinder {
         ? bank.distance 
         : Infinity; 
 
-      const bank_excess = Array.isArray(bank.excess) ? bank.excess : [];
-      const bank_needs = Array.isArray(bank.needs) ? bank.needs : [];
+      const bank_excess = bank.excess || [];
+      const bank_needs = bank.needs || [];
 
       /* Preference scoring using seconds as the common unit: surplus reduces 
       score, need increases it. */
