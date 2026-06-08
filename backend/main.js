@@ -27,25 +27,50 @@ app.use(express.json());
 
 // Find Best Foodbank API Endpoint
 app.post("/api/best-foodbanks", async (req, res) => {
+    try {
+        let {lat, lng, preferences} = req.body;
 
-    let {lat, lng, preferences} = req.body;
+        if (typeof lat !== 'number' || typeof lng !== 'number' || isNaN(lat) || isNaN(lng)) {
+            return res.status(400).json({ error: "Invalid coordinates provided" });
+        }
 
-    lat = Number(lat);
-    lng = Number(lng);
+        lat = Number(lat);
+        lng = Number(lng);
 
-    const finder = new bestFoodBankFinder();
-    const result = await finder.findBest(lat, lng, preferences);
-    res.json(result);
+        const finder = new bestFoodBankFinder();
+        const result = await finder.findBest(lat, lng, preferences);
+
+        if (!result) {
+            return res.status(404).json({ error: "No food bank found" });
+        }
+
+        res.json(result);
+    } catch (err) {
+        console.error("Error in /api/best-foodbanks:", err);
+        res.status(500).json({ error: "Failed to find best food bank. Please try again later." });
+    }
 });
 
 
 // Get List of Foodbanks
 app.get("/api/foodbank-data", (req, res) => {
-    const data = JSON.parse(
-        fs.readFileSync("backend/data/food-bank-data.json", "utf8")
-    );
-    res.json(data)
-})
+    try {
+        const data = JSON.parse(
+            fs.readFileSync("backend/data/food-bank-data.json", "utf8")
+        );
+        res.json(data);
+    } catch (err) {
+        console.error("Error reading food bank data:", err);
+        res.status(500).json({ error: "Failed to load food bank data" });
+    }
+});
+
+
+// Global error handler — catches anything that slips through
+app.use((err, req, res, next) => {
+    console.error("Unhandled error:", err);
+    res.status(500).json({ error: "Internal server error" });
+});
 
 
 app.listen(port, () => {
