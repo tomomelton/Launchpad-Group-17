@@ -1,4 +1,19 @@
-
+/**
+ * ###############################################################################
+ * 
+ * File        : main.js
+ * 
+ * Date        : Wednesday 3rd June 2026
+ * 
+ * Author      : Tom Melton
+ * 
+ * Description : Web app entry point that serves static files from 'public' folder
+ *               and parses JSON requests.
+ *  
+ * History     : 01/06/2026 - v1.0
+ * 
+ * ###############################################################################
+ */
 
 const express = require('express');
 const fs = require("fs");
