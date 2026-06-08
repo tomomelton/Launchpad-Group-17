@@ -341,3 +341,132 @@ button.pill {
 .foodbank-list li p {
   margin: 5px
 }
+
+.result-actions {
+  margin-bottom: 0.75rem;
+}
+
+.btn-secondary {
+  background: var(--white);
+  border: 2px solid var(--border);
+  color: var(--dark-green-dk);
+}
+
+.btn-secondary:hover {
+  background: var(--cream);
+  color: var(--dark-green-dk);
+}
+
+.foodbank-summary-card,
+.resolved-location-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 30px rgba(26, 26, 26, 0.07);
+}
+
+.foodbank-summary-card {
+  display: grid;
+  gap: 1rem;
+  max-width: 520px;
+  margin: 1.25rem 0 2rem;
+  padding: 1.25rem;
+}
+
+.resolved-location-card {
+  max-width: 520px;
+  margin: 0.75rem 0 1rem;
+  padding: 0.9rem 1rem;
+  background: var(--cream);
+  border-left: 5px solid #2f80ed;
+}
+
+.resolved-location-card p {
+  max-width: none;
+  margin: 0.25rem 0 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.summary-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+  align-items: start;
+}
+
+.summary-row p {
+  max-width: none;
+  margin: 0.1rem 0 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.summary-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  background: var(--cream-green);
+  color: var(--dark-green-dk);
+  flex-shrink: 0;
+}
+
+.detail-label {
+  display: block;
+  color: var(--ink-light);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.stat-card {
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius);
+  background: var(--cream-green);
+}
+
+.stat-card strong {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--dark-green-dk);
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  line-height: 1.1;
+}
+
+.foodbank-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 0.25rem;
+}
+
+.foodbank-actions .btn {
+  margin-top: 0;
+}
+
+.hero-text > h2 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.65rem;
+  color: var(--dark-green-dk);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 640px) {
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+}

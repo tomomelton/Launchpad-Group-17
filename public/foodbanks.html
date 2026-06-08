@@ -48,15 +48,47 @@
         <main>
             <div class="hero">
                 <div class="hero-text">
-                    <p style="margin-bottom:0.5rem;"><a href="index.html" class="btn" style="font-size:0.85rem;padding:0.4rem 0.9rem;">&larr; New search</a></p>
+                    <div class="result-actions">
+                        <a href="index.html" class="btn btn-secondary">&larr; New search</a>
+                    </div>
+                    <p class="section-label">Recommended food bank</p>
                     <h1 id="fb-header">Foodbank Name</h1>
-                    <ul class="foodbank-list">
-                        <li><p class="tag" id="fb-searched-address">Searched:</p></li>
-                        <li><p class="tag" id="fb-address">Address:</p></li>
-                        <li><p class="tag" id="fb-postcode">Postcode:</p></li>
-                        <li><p class="tag" id="fb-distance">Distance:</p></li>
-                        <li><p class="tag" id="fb-time">Walking time:</p></li>
-                    </ul>
+
+                    <div class="resolved-location-card" id="fb-resolved-location" hidden>
+                        <span class="detail-label"><i class="fa-solid fa-location-crosshairs"></i> Search resolved to</span>
+                        <p id="fb-resolved-address"></p>
+                    </div>
+
+                    <section class="foodbank-summary-card" aria-label="Foodbank details">
+                        <div class="summary-row">
+                            <span class="summary-icon"><i class="fa-solid fa-location-dot"></i></span>
+                            <div>
+                                <span class="detail-label">Foodbank address</span>
+                                <p id="fb-address">Address</p>
+                            </div>
+                        </div>
+
+                        <div class="summary-row">
+                            <span class="summary-icon"><i class="fa-solid fa-envelope"></i></span>
+                            <div>
+                                <span class="detail-label">Postcode</span>
+                                <p id="fb-postcode">Postcode</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-grid">
+                            <div class="stat-card">
+                                <span class="detail-label">Distance</span>
+                                <strong id="fb-distance">Distance</strong>
+                            </div>
+                            <div class="stat-card">
+                                <span class="detail-label">Walking time</span>
+                                <strong id="fb-time">Walking time</strong>
+                            </div>
+                        </div>
+
+                        <div class="foodbank-actions" id="fb-actions"></div>
+                    </section>
                     
                     <h2>WHAT WE HAVE IN EXCESS</h2>
                     <ul class="foodbank-list" id="excess-list">

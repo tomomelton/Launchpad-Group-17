@@ -36,32 +36,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const searchLocation = JSON.parse(localStorage.getItem("searchLocation") || "null");
         if (searchLocation && searchLocation.resolvedAddress) {
-            document.getElementById("fb-searched-address").innerHTML =
-                "<b>Resolved location: </b>" + searchLocation.resolvedAddress;
+            const resolvedCard = document.getElementById("fb-resolved-location");
+            const resolvedAddress = document.getElementById("fb-resolved-address");
+            resolvedAddress.textContent = searchLocation.resolvedAddress;
+            resolvedCard.hidden = false;
         }
 
         const addressParts = data.address.split(", ")
-        document.getElementById("fb-address").innerHTML =
-            "<b>Address: </b>" + addressParts[0] + ", " + addressParts[1];
+        document.getElementById("fb-address").textContent =
+            addressParts[0] + ", " + addressParts[1];
 
-        document.getElementById("fb-postcode").innerHTML =
-            "<b>Postcode: </b>" + data.postcode;
+        document.getElementById("fb-postcode").textContent = data.postcode;
 
         const distKm = data.distance ? (data.distance / 1000).toFixed(2) : "unknown";
         const walkMin = data.distance ? Math.round(data.distance / 1.34 / 60) : "unknown";
-        document.getElementById("fb-distance").innerHTML =
-            "<b>Distance: </b>" + distKm + " km";
-        document.getElementById("fb-time").innerHTML =
-            "<b>Walking time: </b>" + walkMin + " min";
+        document.getElementById("fb-distance").textContent = distKm + " km";
+        document.getElementById("fb-time").textContent = walkMin + " min";
 
         const directionsOrigin = searchLocation ? searchLocation.lat + "," + searchLocation.lng : "";
         const directionsUrl = "https://www.google.com/maps/dir/?api=1" +
             (directionsOrigin ? "&origin=" + encodeURIComponent(directionsOrigin) : "") +
             "&destination=" + encodeURIComponent(data.latitude + "," + data.longitude) +
             "&travelmode=walking";
-        const directionsLi = document.createElement("li");
-        directionsLi.innerHTML = '<a href="' + directionsUrl + '" target="_blank" class="btn" style="margin-top:0.5rem;display:inline-block;"><i class="fa-solid fa-location-arrow"></i> Get directions</a>';
-        document.querySelector(".foodbank-list").appendChild(directionsLi);
+        const directionsLink = document.createElement("a");
+        directionsLink.href = directionsUrl;
+        directionsLink.target = "_blank";
+        directionsLink.className = "btn";
+        directionsLink.innerHTML = '<i class="fa-solid fa-location-arrow"></i> Get walking directions';
+        document.getElementById("fb-actions").appendChild(directionsLink);
 
         //####### Clear Placeholder Elements #######
         document.querySelectorAll(".list-placeholder").forEach(element => {
