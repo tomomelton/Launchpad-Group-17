@@ -127,6 +127,26 @@ function getSelectedPreferences() {
 
 window.getSelectedPreferences = getSelectedPreferences;
 
+function updateSelectedChips() {
+  var chips = document.getElementById('selected-chips');
+  if (!chips) return;
+  var prefs = getSelectedPreferences();
+  if (prefs.length === 0) {
+    chips.innerHTML = '';
+  } else {
+    chips.innerHTML = '<b>Selected:</b> ' + prefs.join(', ');
+  }
+}
+
+window.updateSelectedChips = updateSelectedChips;
+
+// Watch for checkbox changes to update chips
+document.addEventListener('change', function(e) {
+  if (e.target && e.target.closest('.food-dropdown')) {
+    updateSelectedChips();
+  }
+});
+
 fetch('/api/food-bank-items')
   .then(function (res) {
     if (!res.ok) throw new Error('HTTP ' + res.status);
