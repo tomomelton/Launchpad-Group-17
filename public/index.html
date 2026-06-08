@@ -52,10 +52,10 @@
           <p data-i18n="hero_intro">Search by postcode or address to find nearby foodbank support, see walking distance, and check whether selected food items are listed as available or needed.</p>
 
           <div class="address-search-wrap">
-            <div class="search-box">
-              <input type="text" placeholder="Enter your address" id="address-field" autocomplete="street-address" list="address-suggestions" data-i18n-placeholder="address_placeholder">
-              <datalist id="address-suggestions"></datalist>
+            <div class="search-box address-combobox">
+              <input type="text" placeholder="Enter your address" id="address-field" autocomplete="street-address" role="combobox" aria-autocomplete="list" aria-controls="address-suggestion-list" aria-expanded="false" data-i18n-placeholder="address_placeholder">
               <button type="button" id="search-button" aria-label="Search for nearby foodbanks" data-i18n-aria="search_button"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+              <div id="address-suggestion-list" class="address-suggestion-list" role="listbox" aria-label="Address suggestions" data-i18n-aria="address_suggestions_label" hidden></div>
             </div>
             <p class="address-autofill-hint" data-i18n="address_autofill_hint">Start typing for address suggestions, or use your browser's saved address autofill.</p>
           </div>
@@ -72,12 +72,12 @@
             <div id="selected-chips" class="selected-food-pills" aria-label="Selected food filters" data-i18n-aria="selected_foods_label"></div>
           </div>
 
-          <section class="recent-foodbanks" aria-labelledby="recent-foodbanks-heading">
+          <section class="recent-searches" aria-labelledby="recent-searches-heading">
             <p class="section-label" data-i18n="recent_label">Recent searches</p>
-            <h2 id="recent-foodbanks-heading" data-i18n="recent_heading">Previously viewed foodbanks</h2>
-            <div class="recommendation-grid recent-foodbank-grid" id="recent-foodbank-list">
-              <article class="recommendation-card recommendation-placeholder">
-                <p data-i18n="recent_empty">Search for a foodbank to see your two most recent results here.</p>
+            <h2 id="recent-searches-heading" data-i18n="recent_heading">Recent locations</h2>
+            <div class="recent-search-grid" id="recent-foodbank-list">
+              <article class="recent-search-card recent-search-placeholder">
+                <p data-i18n="recent_empty">Search for a postcode or address to see your two most recent locations here.</p>
               </article>
             </div>
           </section>

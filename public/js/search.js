@@ -1,19 +1,18 @@
 /**
- * Address search, geocoding, recent foodbank cards, and homepage search flow.
+ * Address search, visible address suggestions, recent location cards, and homepage search flow.
  */
 const button = document.getElementById("search-button");
 const addressField = document.getElementById("address-field");
-const addressSuggestions = document.getElementById("address-suggestions");
+const addressSuggestionList = document.getElementById("address-suggestion-list");
 const recentFoodbankList = document.getElementById("recent-foodbank-list");
+
+let suggestionAbortController = null;
+let suggestionTimer = null;
+let selectedAddressSuggestion = null;
+let latestAddressSuggestions = [];
 
 function translate(key) {
     return window.I18N && window.I18N.t ? window.I18N.t(key) : key;
-}
-
-function toArray(value) {
-    if (Array.isArray(value)) return value;
-    if (typeof value === "string" && value.trim()) return value.split(", ");
-    return [];
 }
 
 function formatDistance(distanceMetres) {
@@ -39,22 +38,56 @@ function compactResolvedPlace(displayName, fallback) {
     return usefulParts.slice(0, 2).join(", ");
 }
 
-function saveRecentFoodbank(foodbank, searchLocation) {
-    if (!foodbank || !searchLocation) return;
+function normaliseRecentEntry(item) {
+    const bank = item.bank || item.foodbank || {};
+    const input = item.input || item.searchInput || item.address || "";
+    const resolvedAddress = item.resolvedAddress || item.displayName || input;
+    const resolvedLabel = item.resolvedLabel || compactResolvedPlace(resolvedAddress, input);
 
-    const recent = JSON.parse(localStorage.getItem("recentFoodbanks") || "[]");
-    const entry = {
-        id: foodbank.id || foodbank.name,
-        bank: foodbank,
+    return {
+        id: item.id || [resolvedLabel, input].filter(Boolean).join("|") || String(item.savedAt || Date.now()),
+        bank,
+        input,
+        resolvedAddress,
+        resolvedLabel,
+        lat: item.lat,
+        lng: item.lng,
+        savedAt: item.savedAt || Date.now()
+    };
+}
+
+function getStoredRecentFoodbanks() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem("recentFoodbanks") || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+    }
+    catch (error) {
+        console.warn("Could not read recent searches:", error);
+        return [];
+    }
+}
+
+function saveRecentFoodbank(foodbank, searchLocation) {
+    if (!searchLocation) return;
+
+    const recent = getStoredRecentFoodbanks();
+
+    const entry = normaliseRecentEntry({
+        id: searchLocation.resolvedLabel || searchLocation.input,
+        bank: foodbank || {},
         input: searchLocation.input,
         resolvedAddress: searchLocation.resolvedAddress,
         resolvedLabel: compactResolvedPlace(searchLocation.resolvedAddress, searchLocation.input),
         lat: searchLocation.lat,
         lng: searchLocation.lng,
         savedAt: Date.now()
-    };
+    });
 
-    const deduped = recent.filter(item => item.id !== entry.id && item.input !== entry.input);
+    const entryKey = (entry.resolvedLabel || entry.input || "").toLowerCase();
+    const deduped = recent
+        .map(normaliseRecentEntry)
+        .filter(item => (item.resolvedLabel || item.input || "").toLowerCase() !== entryKey);
+
     deduped.unshift(entry);
     localStorage.setItem("recentFoodbanks", JSON.stringify(deduped.slice(0, 2)));
 }
@@ -62,14 +95,24 @@ function saveRecentFoodbank(foodbank, searchLocation) {
 function renderRecentFoodbanks() {
     if (!recentFoodbankList) return;
 
-    const recent = JSON.parse(localStorage.getItem("recentFoodbanks") || "[]").slice(0, 2);
+    const recent = getStoredRecentFoodbanks()
+        .map(normaliseRecentEntry)
+        .slice(0, 2);
+
     recentFoodbankList.innerHTML = "";
 
     if (recent.length === 0) {
         const placeholder = document.createElement("article");
-        placeholder.className = "recommendation-card recommendation-placeholder";
+        placeholder.className = "recent-search-card recent-search-placeholder";
+
+        const icon = document.createElement("span");
+        icon.className = "recent-search-icon";
+        icon.innerHTML = '<i class="fa-solid fa-location-dot" aria-hidden="true"></i>';
+
         const p = document.createElement("p");
         p.textContent = translate("recent_empty");
+
+        placeholder.appendChild(icon);
         placeholder.appendChild(p);
         recentFoodbankList.appendChild(placeholder);
         return;
@@ -77,84 +120,219 @@ function renderRecentFoodbanks() {
 
     recent.forEach(item => {
         const card = document.createElement("article");
-        card.className = "recommendation-card recent-foodbank-card";
+        card.className = "recent-search-card";
 
-        const header = document.createElement("div");
-        header.className = "recommendation-card-header";
-        header.innerHTML = '<span class="recommendation-rank">' + translate("recent_label") + '</span><strong>' + (item.bank.name || "Foodbank") + '</strong>';
+        const top = document.createElement("div");
+        top.className = "recent-search-top";
 
-        const place = document.createElement("p");
-        place.className = "recommendation-postcode";
-        place.innerHTML = '<i class="fa-solid fa-location-dot" aria-hidden="true"></i> <span><b>' + translate("recent_place_label") + ':</b> ' + (item.resolvedLabel || compactResolvedPlace(item.resolvedAddress, item.input)) + '</span>';
+        const icon = document.createElement("span");
+        icon.className = "recent-search-icon";
+        icon.innerHTML = '<i class="fa-solid fa-location-dot" aria-hidden="true"></i>';
 
-        const postcode = document.createElement("p");
-        postcode.className = "recommendation-postcode";
-        postcode.innerHTML = '<i class="fa-solid fa-envelope" aria-hidden="true"></i> ' + (item.bank.postcode || "Postcode unavailable");
+        const text = document.createElement("div");
+        const label = document.createElement("span");
+        label.className = "recent-search-eyebrow";
+        label.textContent = translate("recent_location_label");
+
+        const title = document.createElement("h3");
+        title.textContent = item.resolvedLabel || item.input || translate("recent_unknown_location");
+
+        text.appendChild(label);
+        text.appendChild(title);
+        top.appendChild(icon);
+        top.appendChild(text);
+
+        const original = document.createElement("p");
+        original.className = "recent-search-meta";
+        original.innerHTML = '<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>';
+        const originalText = document.createElement("span");
+        originalText.textContent = " " + translate("recent_original_search") + ": " + (item.input || item.resolvedLabel || translate("recent_unknown_location"));
+        original.appendChild(originalText);
+
+        const match = document.createElement("p");
+        match.className = "recent-search-meta";
+        match.innerHTML = '<i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>';
+        const matchText = document.createElement("span");
+        matchText.textContent = " " + translate("recent_matched_foodbank") + ": " + (item.bank.name || translate("recent_foodbank_unavailable"));
+        match.appendChild(matchText);
 
         const distance = document.createElement("p");
-        distance.className = "recommendation-distance";
-        distance.innerHTML = '<i class="fa-solid fa-route" aria-hidden="true"></i> ' + formatDistance(item.bank.distance);
+        distance.className = "recent-search-meta";
+        distance.innerHTML = '<i class="fa-solid fa-route" aria-hidden="true"></i>';
+        const distanceText = document.createElement("span");
+        distanceText.textContent = " " + formatDistance(item.bank.distance);
+        distance.appendChild(distanceText);
 
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "btn btn-secondary btn-small recommendation-select";
-        button.textContent = translate("recent_view");
-        button.addEventListener("click", () => {
+        const actions = document.createElement("div");
+        actions.className = "recent-search-actions";
+
+        const reuseButton = document.createElement("button");
+        reuseButton.type = "button";
+        reuseButton.className = "btn btn-secondary btn-small";
+        reuseButton.textContent = translate("recent_use_search");
+        reuseButton.addEventListener("click", () => {
+            if (addressField) {
+                addressField.value = item.resolvedLabel || item.input || "";
+                addressField.focus();
+            }
+        });
+
+        const openButton = document.createElement("button");
+        openButton.type = "button";
+        openButton.className = "btn btn-small";
+        openButton.textContent = translate("recent_view");
+        openButton.addEventListener("click", () => {
             localStorage.setItem("selectedFoodbank", JSON.stringify(item.bank));
-            localStorage.setItem("searchAddress", item.input || item.resolvedLabel || "");
+            localStorage.setItem("searchAddress", item.resolvedLabel || item.input || "");
             localStorage.setItem("searchLocation", JSON.stringify({
                 input: item.input,
                 resolvedAddress: item.resolvedAddress,
+                resolvedLabel: item.resolvedLabel,
                 lat: item.lat,
                 lng: item.lng
             }));
             window.location.href = "foodbanks.html";
         });
 
-        card.appendChild(header);
-        card.appendChild(place);
-        card.appendChild(postcode);
+        actions.appendChild(reuseButton);
+        if (item.bank && item.bank.name) actions.appendChild(openButton);
+
+        card.appendChild(top);
+        card.appendChild(original);
+        card.appendChild(match);
         card.appendChild(distance);
-        card.appendChild(button);
+        card.appendChild(actions);
         recentFoodbankList.appendChild(card);
     });
 }
 
-let suggestionAbortController = null;
-let suggestionTimer = null;
+function hideAddressSuggestions() {
+    if (!addressSuggestionList) return;
+    addressSuggestionList.hidden = true;
+    addressSuggestionList.innerHTML = "";
+    if (addressField) addressField.setAttribute("aria-expanded", "false");
+}
+
+function chooseAddressSuggestion(suggestion) {
+    selectedAddressSuggestion = suggestion;
+    if (addressField) {
+        addressField.value = suggestion.label;
+        addressField.focus();
+    }
+    hideAddressSuggestions();
+}
+
+function renderAddressSuggestions(suggestions) {
+    if (!addressSuggestionList || !addressField) return;
+
+    addressSuggestionList.innerHTML = "";
+    latestAddressSuggestions = suggestions;
+
+    if (!suggestions.length) {
+        hideAddressSuggestions();
+        return;
+    }
+
+    suggestions.forEach((suggestion, index) => {
+        const option = document.createElement("button");
+        option.type = "button";
+        option.className = "address-suggestion-option";
+        option.setAttribute("role", "option");
+        option.id = "address-suggestion-" + index;
+
+        const title = document.createElement("span");
+        title.className = "address-suggestion-title";
+        title.textContent = suggestion.label;
+
+        const detail = document.createElement("span");
+        detail.className = "address-suggestion-detail";
+        detail.textContent = suggestion.displayName;
+
+        option.appendChild(title);
+        option.appendChild(detail);
+        option.addEventListener("click", () => chooseAddressSuggestion(suggestion));
+        addressSuggestionList.appendChild(option);
+    });
+
+    addressSuggestionList.hidden = false;
+    addressField.setAttribute("aria-expanded", "true");
+}
 
 async function updateAddressSuggestions(query) {
-    if (!addressSuggestions || !query || query.trim().length < 3) return;
+    const trimmed = String(query || "").trim();
+    selectedAddressSuggestion = null;
+
+    if (!trimmed || trimmed.length < 3) {
+        hideAddressSuggestions();
+        return;
+    }
 
     if (suggestionAbortController) suggestionAbortController.abort();
     suggestionAbortController = new AbortController();
 
-    const url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&countrycodes=gb&q=" + encodeURIComponent(query);
+    const url = "https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&countrycodes=gb&q=" + encodeURIComponent(trimmed);
     const response = await fetch(url, { signal: suggestionAbortController.signal });
     const data = await response.json();
 
-    addressSuggestions.innerHTML = "";
-    data.forEach(result => {
-        const option = document.createElement("option");
-        option.value = compactResolvedPlace(result.display_name, query);
-        option.label = result.display_name || option.value;
-        option.dataset.lat = result.lat;
-        option.dataset.lon = result.lon;
-        option.dataset.displayName = result.display_name || option.value;
-        addressSuggestions.appendChild(option);
-    });
+    const suggestions = data.map(result => ({
+        label: compactResolvedPlace(result.display_name, trimmed),
+        displayName: result.display_name || trimmed,
+        lat: parseFloat(result.lat),
+        lng: parseFloat(result.lon)
+    })).filter(suggestion => Number.isFinite(suggestion.lat) && Number.isFinite(suggestion.lng));
+
+    renderAddressSuggestions(suggestions);
 }
 
 if (addressField) {
     addressField.addEventListener("input", () => {
+        selectedAddressSuggestion = null;
         clearTimeout(suggestionTimer);
         suggestionTimer = setTimeout(() => {
             updateAddressSuggestions(addressField.value.trim()).catch(error => {
-                if (error.name !== "AbortError") console.error("Could not load address suggestions:", error);
+                if (error.name !== "AbortError") {
+                    console.error("Could not load address suggestions:", error);
+                    hideAddressSuggestions();
+                }
             });
-        }, 350);
+        }, 300);
+    });
+
+    addressField.addEventListener("keydown", event => {
+        if (event.key === "Escape") hideAddressSuggestions();
+        if (event.key === "ArrowDown" && !addressSuggestionList?.hidden) {
+            event.preventDefault();
+            addressSuggestionList.querySelector("button")?.focus();
+        }
     });
 }
+
+if (addressSuggestionList) {
+    addressSuggestionList.addEventListener("keydown", event => {
+        const options = Array.from(addressSuggestionList.querySelectorAll("button"));
+        const currentIndex = options.indexOf(document.activeElement);
+
+        if (event.key === "Escape") {
+            hideAddressSuggestions();
+            addressField?.focus();
+        }
+
+        if (event.key === "ArrowDown") {
+            event.preventDefault();
+            options[Math.min(currentIndex + 1, options.length - 1)]?.focus();
+        }
+
+        if (event.key === "ArrowUp") {
+            event.preventDefault();
+            if (currentIndex <= 0) addressField?.focus();
+            else options[currentIndex - 1]?.focus();
+        }
+    });
+}
+
+document.addEventListener("click", event => {
+    if (!event.target.closest(".address-search-wrap")) hideAddressSuggestions();
+});
 
 if (button && addressField) {
     button.addEventListener("click", async () => {
@@ -220,12 +398,21 @@ if (button && addressField) {
 }
 
 async function getCoordinates(address) {
-    const matchingOption = addressSuggestions ? Array.from(addressSuggestions.options).find(option => option.value === address) : null;
-    if (matchingOption && matchingOption.dataset.lat && matchingOption.dataset.lon) {
+    const selectedMatchesInput = selectedAddressSuggestion && selectedAddressSuggestion.label === address;
+    if (selectedMatchesInput) {
         return {
-            lat: parseFloat(matchingOption.dataset.lat),
-            lng: parseFloat(matchingOption.dataset.lon),
-            displayName: matchingOption.dataset.displayName || matchingOption.label || address
+            lat: selectedAddressSuggestion.lat,
+            lng: selectedAddressSuggestion.lng,
+            displayName: selectedAddressSuggestion.displayName || address
+        };
+    }
+
+    const matchingSuggestion = latestAddressSuggestions.find(suggestion => suggestion.label === address || suggestion.displayName === address);
+    if (matchingSuggestion) {
+        return {
+            lat: matchingSuggestion.lat,
+            lng: matchingSuggestion.lng,
+            displayName: matchingSuggestion.displayName || address
         };
     }
 
@@ -246,6 +433,8 @@ async function getCoordinates(address) {
 
 window.getCoords = getCoordinates;
 window.renderRecentFoodbanks = renderRecentFoodbanks;
+window.renderRecentSearches = renderRecentFoodbanks;
+window.updateAddressSuggestions = updateAddressSuggestions;
 
 document.addEventListener("DOMContentLoaded", renderRecentFoodbanks);
 document.addEventListener("languagechange", renderRecentFoodbanks);

@@ -141,13 +141,31 @@
   }
 
 
-  .recent-foodbanks {
+  .recent-searches {
     margin-top: 1.25rem;
     padding: 1rem;
   }
 
-  .recent-foodbank-grid {
+  .recent-search-grid {
     grid-template-columns: 1fr;
+  }
+
+  .recent-search-card {
+    padding: 0.9rem;
+  }
+
+  .recent-search-actions .btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .address-suggestion-list {
+    max-height: 14rem;
+  }
+
+  .address-suggestion-option {
+    min-height: 56px;
   }
 
   .selected-food-pills {
