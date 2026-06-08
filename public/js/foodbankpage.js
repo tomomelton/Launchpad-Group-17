@@ -20,7 +20,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = JSON.parse(localStorage.getItem("selectedFoodbank"));
 
     if (data) {
-        
+
+        // Normalise needs/excess to arrays (backend may send strings or arrays)
+        const toArray = (val) => {
+            if (Array.isArray(val)) return val;
+            if (typeof val === 'string' && val.trim()) return val.split(', ');
+            return [];
+        };
+        data.excess = toArray(data.excess);
+        data.needs = toArray(data.needs);
+
         //####### Load Main Foodbank Details #######
         document.getElementById("fb-header").textContent =
             data.name;
@@ -40,15 +49,14 @@ document.addEventListener("DOMContentLoaded", () => {
         //####### Load Foodbank Excess #######
         const excessList = document.getElementById("excess-list")
 
-        const excessItems = (data.excess || "").split(", ").filter(item => item.trim() !== "");
-        if (excessItems.length === 0) {
+        if (data.excess.length === 0) {
             let li = document.createElement("li");
             let p = document.createElement("p");
             p.textContent = "No items currently in excess";
             li.appendChild(p);
             excessList.appendChild(li);
         } else {
-            excessItems.forEach(item => {
+            data.excess.forEach(item => {
                 let p = document.createElement("p");
                 p.textContent = item;
 
@@ -62,15 +70,14 @@ document.addEventListener("DOMContentLoaded", () => {
         //####### Load Foodbank Needs #######
         const needsList = document.getElementById("needs-list")
 
-        const needsItems = (data.needs || "").split(", ").filter(item => item.trim() !== "");
-        if (needsItems.length === 0) {
+        if (data.needs.length === 0) {
             let li = document.createElement("li");
             let p = document.createElement("p");
             p.textContent = "No items currently needed";
             li.appendChild(p);
             needsList.appendChild(li);
         } else {
-            needsItems.forEach(item => {
+            data.needs.forEach(item => {
                 let p = document.createElement("p");
                 p.textContent = item;
 
