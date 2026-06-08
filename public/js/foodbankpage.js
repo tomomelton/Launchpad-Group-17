@@ -69,22 +69,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //####### Load Foodbank Needs #######
         const needsList = document.getElementById("needs-list")
+        let needsSorted = false;
 
-        if (data.needs.length === 0) {
-            let li = document.createElement("li");
-            let p = document.createElement("p");
-            p.textContent = "No items currently needed";
-            li.appendChild(p);
-            needsList.appendChild(li);
-        } else {
-            data.needs.forEach(item => {
-                let p = document.createElement("p");
-                p.textContent = item;
-
+        function renderNeeds(needs) {
+            needsList.innerHTML = "";
+            if (needs.length === 0) {
                 let li = document.createElement("li");
+                let p = document.createElement("p");
+                p.textContent = "No items currently needed";
                 li.appendChild(p);
-
                 needsList.appendChild(li);
+            } else {
+                needs.forEach(item => {
+                    let p = document.createElement("p");
+                    p.textContent = item;
+                    let li = document.createElement("li");
+                    li.appendChild(p);
+                    needsList.appendChild(li);
+                });
+            }
+        }
+
+        renderNeeds(data.needs);
+
+        const sortBtn = document.getElementById("sort-needs");
+        if (sortBtn) {
+            sortBtn.addEventListener("click", () => {
+                needsSorted = !needsSorted;
+                const sorted = needsSorted
+                    ? [...data.needs].sort((a, b) => a.localeCompare(b))
+                    : data.needs;
+                sortBtn.textContent = needsSorted ? "Original order" : "Sort A-Z";
+                renderNeeds(sorted);
             });
         }
 
