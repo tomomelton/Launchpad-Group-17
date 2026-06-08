@@ -41,6 +41,13 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("fb-postcode").innerHTML =
             "<b>Postcode: </b>" + data.postcode;
 
+        const distKm = data.distance ? (data.distance / 1000).toFixed(2) : "unknown";
+        const walkMin = data.distance ? Math.round(data.distance / 1.34 / 60) : "unknown";
+        document.getElementById("fb-distance").innerHTML =
+            "<b>Distance: </b>" + distKm + " km";
+        document.getElementById("fb-time").innerHTML =
+            "<b>Walking time: </b>" + walkMin + " min";
+
         //####### Clear Placeholder Elements #######
         document.querySelectorAll(".list-placeholder").forEach(element => {
             element.remove();
