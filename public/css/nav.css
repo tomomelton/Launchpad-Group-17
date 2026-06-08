@@ -19,6 +19,9 @@ nav {
 }
 
 .nav-logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--font-heading);
   font-size: 1.3rem;
   font-weight: 700;

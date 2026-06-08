@@ -8,15 +8,22 @@ document.addEventListener('click', function (e) {
 var toggle = document.querySelector('.nav-toggle');
 var navMenu = document.querySelector('.nav-menu');
 
-if (toggle) {
+function setMenuOpen(isOpen) {
+  if (!navMenu || !toggle) return;
+  navMenu.classList.toggle('open', isOpen);
+  toggle.setAttribute('aria-expanded', String(isOpen));
+  toggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+}
+
+if (toggle && navMenu) {
   toggle.addEventListener('click', function () {
-    navMenu.classList.toggle('open');
+    setMenuOpen(!navMenu.classList.contains('open'));
   });
 }
 
 var links = document.querySelectorAll('.nav-links a');
 for (var i = 0; i < links.length; i++) {
   links[i].addEventListener('click', function () {
-    navMenu.classList.remove('open');
+    setMenuOpen(false);
   });
 }

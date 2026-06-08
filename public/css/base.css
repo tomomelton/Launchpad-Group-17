@@ -67,6 +67,23 @@ img {
   max-width: 100%;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--dark-green);
+  outline-offset: 3px;
+}
+
+header a:focus-visible,
+header button:focus-visible,
+footer a:focus-visible,
+footer button:focus-visible {
+  outline-color: var(--white);
+}
+
 .container {
   max-width: var(--max-width);
   margin: 0 auto;

@@ -19,19 +19,19 @@
       <nav>
         <a href="index.html" class="nav-logo">FoodBank<span>Finder</span></a>
 
-        <button class="nav-toggle" type="button">
-          <i class="fa-solid fa-bars"></i>
+        <button class="nav-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-navigation">
+          <i class="fa-solid fa-bars" aria-hidden="true"></i>
         </button>
 
-        <div class="nav-menu">
+        <div class="nav-menu" id="primary-navigation">
           <ul class="nav-links">
             <li><a href="about.html">About us</a></li>
             <li><a href="foodbanks.html">Foodbank</a></li>
           </ul>
 
           <div class="lang-dropdown">
-            <button class="nav-lang" type="button" onclick="document.querySelector('.lang-menu').classList.toggle('open')">
-              <span id="lang-label">English</span> <i class="fa-solid fa-chevron-down"></i>
+            <button class="nav-lang" type="button" aria-label="Choose language" onclick="document.querySelector('.lang-menu').classList.toggle('open')">
+              <span id="lang-label">English</span> <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
             </button>
             <div class="lang-menu">
               <a href="#" onclick="setLanguage('English');return false;">English</a>
@@ -49,12 +49,12 @@
       <div class="hero">
         <div class="hero-text">
           <h1>Find a <span>food bank</span> near you</h1>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <p>Search by postcode or address to find nearby foodbank support, see walking distance, and check whether selected food items are listed as available or needed.</p>
 
           <div style="position:relative;">
             <div class="search-box">
               <input type="text" placeholder="Enter your address" id="address-field" autocomplete="off">
-              <button type="button" id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+              <button type="button" id="search-button" aria-label="Search for nearby foodbanks"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
             </div>
             <div id="address-history" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--white);border:1px solid var(--border);border-radius:0 0 var(--radius) var(--radius);z-index:100;box-shadow:0 4px 12px rgba(0,0,0,0.08);"></div>
           </div>
@@ -83,8 +83,8 @@
             <div>
               <p class="section-label">Learn more</p>
               <h2>About Us</h2>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+              <p>FoodBankFinder is a student prototype designed to reduce confusion when people need to locate food support. It combines location, item information, and walking guidance in one simple place.</p>
+              <p>Foodbank details can change quickly, so the app is best used as a starting point alongside advice from foodbanks, referrers, or local support services.</p>
               <a href="about.html" class="btn">Read More</a>
             </div>
             <div class="left-img">
@@ -103,9 +103,9 @@
             <div>
               <p class="section-label">Network</p>
               <h2>Foodbanks</h2>
-              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-              <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
-              <a href="#" class="btn">Learn More</a>
+              <p>Browse foodbanks by distance and item match, then compare alternatives if the first result is not suitable.</p>
+              <p>The prototype highlights reported excess items and needed items so users and donors can make more informed decisions before travelling.</p>
+              <a href="foodbanks.html" class="btn">Learn More</a>
             </div>
           </div>
         </div>
@@ -123,9 +123,9 @@
           <li><a href="#">Contact</a></li>
         </ul>
         <span>© 2026 FoodBankFinder</span>
-        <div style="margin-top:1rem;">
-          <button type="button" onclick="document.body.classList.toggle('high-contrast');localStorage.setItem('highContrast',document.body.classList.contains('high-contrast'));" style="background:transparent;border:1px solid var(--border);padding:0.3rem 0.7rem;border-radius:6px;cursor:pointer;font-size:0.8rem;color:inherit;margin-right:0.5rem;">Toggle high contrast</button>
-          <button type="button" onclick="document.body.classList.toggle('large-text');localStorage.setItem('largeText',document.body.classList.contains('large-text'));" style="background:transparent;border:1px solid var(--border);padding:0.3rem 0.7rem;border-radius:6px;cursor:pointer;font-size:0.8rem;color:inherit;">Toggle large text</button>
+        <div class="footer-accessibility-controls">
+          <button type="button" aria-label="Toggle high contrast display" onclick="document.body.classList.toggle('high-contrast');localStorage.setItem('highContrast',document.body.classList.contains('high-contrast'));">Toggle high contrast</button>
+          <button type="button" aria-label="Toggle large text display" onclick="document.body.classList.toggle('large-text');localStorage.setItem('largeText',document.body.classList.contains('large-text'));">Toggle large text</button>
         </div>
       </div>
 

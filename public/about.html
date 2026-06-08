@@ -18,19 +18,19 @@
             <nav>
             <a href="index.html" class="nav-logo">FoodBank<span>Finder</span></a>
 
-            <button class="nav-toggle" type="button">
-                <i class="fa-solid fa-bars"></i>
+            <button class="nav-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-navigation">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
             </button>
 
-            <div class="nav-menu">
+            <div class="nav-menu" id="primary-navigation">
                 <ul class="nav-links">
                 <li><a href="about.html">About us</a></li>
                 <li><a href="foodbanks.html">Foodbank</a></li>
                 </ul>
 
                 <div class="lang-dropdown">
-                <button class="nav-lang" type="button" onclick="document.querySelector('.lang-menu').classList.toggle('open')">
-                    English <i class="fa-solid fa-chevron-down"></i>
+                <button class="nav-lang" type="button" aria-label="Choose language" onclick="document.querySelector('.lang-menu').classList.toggle('open')">
+                    English <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                 </button>
                 <div class="lang-menu">
                     <a href="#">English</a>
@@ -51,14 +51,14 @@
                 <div class="about-row">
                     <div class="about-cell about-content">
                         <h2>Our mission</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <p>We are building a student prototype that helps people find nearby foodbank support and understand basic travel and item information before they set off.</p>
                     </div>
                     <div class="about-cell about-image">
                         <img src="assets/team-2.jpg" alt="Food bank volunteers">
                     </div>
                     <div class="about-cell about-content">
                         <h2>Our community</h2>
-                        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        <p>Food support can be difficult to navigate on a phone, especially when people need quick answers about distance, location, and whether a foodbank lists certain items.</p>
                     </div>
                 </div>
 
@@ -68,8 +68,8 @@
                     </div>
                     <div class="about-cell about-content">
                         <h2>What we do</h2>
-                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p>FoodBankFinder combines postcode search, walking guidance, item lists, and alternative recommendations in one mobile-friendly page.</p>
+                        <p>The app is a prototype, so foodbank information should be checked with the foodbank or a referrer before travelling.</p>
                     </div>
                     <div class="about-cell about-image">
                         <img src="assets/image-4.jpg" alt="People receiving food support">

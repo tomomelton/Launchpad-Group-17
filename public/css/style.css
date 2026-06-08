@@ -661,6 +661,18 @@ button.pill {
   letter-spacing: 0.08em;
 }
 
+.item-data-note {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.85rem;
+  color: var(--ink);
+  background: var(--cream-green);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
 .item-filter {
   display: flex;
   align-items: stretch;
@@ -818,6 +830,30 @@ button.pill {
 }
 
 @media (max-width: 640px) {
+  .foodbank-result-layout {
+    padding-top: 1.5rem;
+  }
+
+  .result-topbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .result-topbar .btn-small {
+    align-self: flex-start;
+  }
+
+  .foodbank-summary-card,
+  .item-search-panel,
+  .recommendation-panel {
+    padding: 1rem;
+  }
+
+  .summary-row {
+    gap: 0.7rem;
+  }
+
   .stat-grid,
   .item-grid {
     grid-template-columns: 1fr;
@@ -830,5 +866,27 @@ button.pill {
 
   .item-filter {
     width: 100%;
+  }
+
+  .foodbank-result-layout .hero-map {
+    height: 340px;
+    min-height: 340px;
+  }
+
+  .leaflet-touch .leaflet-control-zoom a,
+  .leaflet-control-zoom a {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+  }
+
+  .foodbank-result-layout #fb-map {
+    min-height: 340px;
+  }
+
+  .recommendation-card .btn,
+  .foodbank-actions .btn {
+    width: 100%;
+    text-align: center;
   }
 }

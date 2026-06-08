@@ -19,19 +19,19 @@
             <nav>
             <a href="index.html" class="nav-logo">FoodBank<span>Finder</span></a>
 
-            <button class="nav-toggle" type="button">
-                <i class="fa-solid fa-bars"></i>
+            <button class="nav-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-navigation">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
             </button>
 
-            <div class="nav-menu">
+            <div class="nav-menu" id="primary-navigation">
                 <ul class="nav-links">
                 <li><a href="about.html">About us</a></li>
                 <li><a href="foodbanks.html">Foodbank</a></li>
                 </ul>
 
                 <div class="lang-dropdown">
-                <button class="nav-lang" type="button" onclick="document.querySelector('.lang-menu').classList.toggle('open')">
-                    English <i class="fa-solid fa-chevron-down"></i>
+                <button class="nav-lang" type="button" aria-label="Choose language" onclick="document.querySelector('.lang-menu').classList.toggle('open')">
+                    English <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                 </button>
                 <div class="lang-menu">
                     <a href="#">English</a>
@@ -86,6 +86,7 @@
                     </section>
 
                     <section class="item-search-panel" aria-label="Foodbank item search and lists">
+                        <p class="item-data-note">Item information can change quickly. Use this prototype as a guide and check with the foodbank or a referrer before travelling for a specific item.</p>
                         <label class="item-filter">
                             <span class="sr-only">Search foodbank items</span>
                             <i class="fa-solid fa-magnifying-glass"></i>
