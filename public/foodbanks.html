@@ -116,9 +116,23 @@
                     </section>
                 </div>
 
-                <div class="hero-map">
-                    <div class="map-placeholder" id="fb-map"></div>
-                    <p style="position:absolute;bottom:4px;left:8px;right:8px;background:rgba(255,255,255,0.85);padding:4px 8px;border-radius:6px;font-size:0.75rem;color:var(--ink-mid);z-index:500;"><i class="fa-solid fa-hand-pointer"></i> Drag to pan &middot; Scroll to zoom &middot; Click marker for details</p>
+                <div class="map-side">
+                    <div class="hero-map">
+                        <div class="map-placeholder" id="fb-map"></div>
+                        <p style="position:absolute;bottom:4px;left:8px;right:8px;background:rgba(255,255,255,0.85);padding:4px 8px;border-radius:6px;font-size:0.75rem;color:var(--ink-mid);z-index:500;"><i class="fa-solid fa-hand-pointer"></i> Drag to pan &middot; Scroll to zoom &middot; Click marker for details</p>
+                    </div>
+
+                    <section class="recommendation-panel" aria-labelledby="recommendation-heading">
+                        <div class="recommendation-header">
+                            <p class="section-label">Other options</p>
+                            <h2 id="recommendation-heading">Recommended alternatives</h2>
+                        </div>
+                        <div class="recommendation-grid" id="recommendation-list">
+                            <article class="recommendation-card recommendation-placeholder">
+                                <p>Loading recommendations...</p>
+                            </article>
+                        </div>
+                    </section>
                 </div>
             </div>
 

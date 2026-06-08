@@ -86,6 +86,7 @@ button.addEventListener("click", async () => {
         }
 
         localStorage.setItem("selectedFoodbank", JSON.stringify(data));
+        localStorage.setItem("searchedFoodItems", JSON.stringify(preferences));
         localStorage.setItem("searchAddress", address);
         localStorage.setItem("searchLocation", JSON.stringify({
             input: address,

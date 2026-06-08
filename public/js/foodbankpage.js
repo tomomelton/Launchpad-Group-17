@@ -27,8 +27,47 @@ document.addEventListener("DOMContentLoaded", () => {
             if (typeof val === 'string' && val.trim()) return val.split(', ');
             return [];
         };
+
+        const normaliseText = (value) => String(value || "")
+            .toLowerCase()
+            .replace(/&/g, "and")
+            .replace(/[^a-z0-9]+/g, " ")
+            .trim();
+
+        const itemMatchesQuery = (item, query) => {
+            const itemText = normaliseText(item);
+            const queryText = normaliseText(query);
+            return Boolean(itemText && queryText && (itemText === queryText || itemText.includes(queryText) || queryText.includes(itemText)));
+        };
+
+        const getMatchingQueries = (items, queriedItems) => queriedItems.filter(query =>
+            items.some(item => itemMatchesQuery(item, query))
+        );
+
+        const getMatchingItems = (items, queriedItems) => items.filter(item =>
+            queriedItems.some(query => itemMatchesQuery(item, query))
+        );
+
+        const formatDistance = (distanceMetres) => {
+            if (!Number.isFinite(distanceMetres)) return "Distance unknown";
+            return (distanceMetres / 1000).toFixed(2) + " km away";
+        };
+
+        const haversineDistance = (lat1, lon1, lat2, lon2) => {
+            const toRad = degrees => degrees * Math.PI / 180;
+            const earthRadius = 6371000;
+            const dLat = toRad(Number(lat2) - Number(lat1));
+            const dLon = toRad(Number(lon2) - Number(lon1));
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(toRad(Number(lat1))) * Math.cos(toRad(Number(lat2))) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            return earthRadius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        };
+
         data.excess = toArray(data.excess);
         data.needs = toArray(data.needs);
+
+        const queriedItems = toArray(JSON.parse(localStorage.getItem("searchedFoodItems") || "[]"));
 
         //####### Load Main Foodbank Details #######
         document.getElementById("fb-header").textContent =
@@ -64,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
             element.remove();
         });
 
-        const renderItemGrid = (items, listElement, emptyMessage) => {
+        const renderItemGrid = (items, listElement, emptyMessage, highlightType) => {
             listElement.innerHTML = "";
 
             if (items.length === 0) {
@@ -80,9 +119,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             items.forEach(item => {
+                const matchingQueries = queriedItems.filter(query => itemMatchesQuery(item, query));
                 const li = document.createElement("li");
                 li.className = "item-card";
                 li.dataset.item = item.toLowerCase();
+
+                if (matchingQueries.length > 0) {
+                    li.classList.add(highlightType === "excess" ? "item-card-match-excess" : "item-card-match-needs");
+                    li.setAttribute("title", "Matches your search: " + matchingQueries.join(", "));
+                }
 
                 const icon = document.createElement("span");
                 icon.className = "item-card-icon";
@@ -93,6 +138,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 li.appendChild(icon);
                 li.appendChild(p);
+
+                if (matchingQueries.length > 0) {
+                    const badge = document.createElement("span");
+                    badge.className = "item-match-badge";
+                    badge.textContent = highlightType === "excess" ? "Requested" : "Needed";
+                    li.appendChild(badge);
+                }
+
                 listElement.appendChild(li);
             });
         };
@@ -108,15 +161,101 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         };
 
+        const renderRecommendationCard = (recommendation) => {
+            const card = document.createElement("article");
+            card.className = "recommendation-card";
+
+            const matchedText = recommendation.excessMatches.length > 0
+                ? recommendation.excessMatches.join(", ")
+                : "No exact requested-item match";
+
+            const neededText = recommendation.needsMatches.length > 0
+                ? recommendation.needsMatches.join(", ")
+                : "None of your requested items are listed as needed";
+
+            card.innerHTML = `
+                <div class="recommendation-card-header">
+                    <span class="recommendation-rank">Alternative</span>
+                    <strong>${recommendation.bank.name}</strong>
+                </div>
+                <p class="recommendation-distance"><i class="fa-solid fa-route"></i> ${formatDistance(recommendation.distance)}</p>
+                <div class="recommendation-reason">
+                    <span class="recommendation-pill recommendation-pill-good"><i class="fa-solid fa-circle-check"></i> ${matchedText}</span>
+                    ${recommendation.needsMatches.length > 0 ? `<span class="recommendation-pill recommendation-pill-warning"><i class="fa-solid fa-triangle-exclamation"></i> Also needs: ${neededText}</span>` : ""}
+                </div>
+                <p>${recommendation.reason}</p>
+                <button type="button" class="btn btn-secondary btn-small recommendation-select">View this foodbank</button>
+            `;
+
+            card.querySelector(".recommendation-select").addEventListener("click", () => {
+                localStorage.setItem("selectedFoodbank", JSON.stringify({
+                    ...recommendation.bank,
+                    distance: recommendation.distance
+                }));
+                window.location.href = "foodbanks.html";
+            });
+
+            return card;
+        };
+
+        const renderRecommendations = async () => {
+            const recommendationList = document.getElementById("recommendation-list");
+            if (!recommendationList || !searchLocation) return;
+
+            try {
+                const response = await fetch("/api/foodbank-data");
+                if (!response.ok) throw new Error("Could not load foodbank data");
+
+                const foodbanks = await response.json();
+                const recommendations = foodbanks
+                    .filter(bank => bank.id !== data.id && bank.name !== data.name)
+                    .map(bank => {
+                        const normalisedBank = {
+                            ...bank,
+                            latitude: Number(bank.latitude),
+                            longitude: Number(bank.longitude),
+                            excess: toArray(bank.excess),
+                            needs: toArray(bank.needs)
+                        };
+                        const distance = haversineDistance(searchLocation.lat, searchLocation.lng, normalisedBank.latitude, normalisedBank.longitude) * 1.3;
+                        const excessMatches = getMatchingQueries(normalisedBank.excess, queriedItems);
+                        const needsMatches = getMatchingQueries(normalisedBank.needs, queriedItems);
+                        const score = (excessMatches.length * 10000) - (needsMatches.length * 2500) - distance;
+                        const reason = excessMatches.length > 0
+                            ? `Recommended because it has ${excessMatches.length} of your requested item${excessMatches.length === 1 ? "" : "s"} in excess, while still considering walking distance.`
+                            : `Recommended as a nearby alternative. It does not list your requested items in excess, so distance is the main reason.`;
+
+                        return { bank: normalisedBank, distance, excessMatches, needsMatches, score, reason };
+                    })
+                    .sort((a, b) => b.score - a.score)
+                    .slice(0, 2);
+
+                recommendationList.innerHTML = "";
+
+                if (recommendations.length === 0) {
+                    recommendationList.innerHTML = '<article class="recommendation-card"><p>No alternative foodbanks available.</p></article>';
+                    return;
+                }
+
+                recommendations.forEach(recommendation => {
+                    recommendationList.appendChild(renderRecommendationCard(recommendation));
+                });
+            } catch (error) {
+                console.error("Could not render recommendations:", error);
+                recommendationList.innerHTML = '<article class="recommendation-card"><p>Recommendations are unavailable right now.</p></article>';
+            }
+        };
+
         //####### Load Foodbank Excess #######
         const excessList = document.getElementById("excess-list");
-        renderItemGrid(data.excess, excessList, "No items currently in excess");
+        renderItemGrid(data.excess, excessList, "No items currently in excess", "excess");
 
         //####### Load Foodbank Needs #######
         const needsList = document.getElementById("needs-list");
-        renderItemGrid(data.needs, needsList, "No items currently needed");
+        renderItemGrid(data.needs, needsList, "No items currently needed", "needs");
 
         attachItemFilter(document.getElementById("item-filter"), [excessList, needsList]);
+        renderRecommendations();
 
         //####### Load Map #######
         const foodbankLatLng = [data.latitude, data.longitude];
@@ -199,8 +338,5 @@ document.addEventListener("DOMContentLoaded", () => {
             foodbankMarker.openPopup();
             setTimeout(() => map.invalidateSize(), 100);
         }
-        
-        
-}
-
-})
+    }
+});

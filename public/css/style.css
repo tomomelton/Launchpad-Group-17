@@ -349,6 +349,7 @@ button.pill {
 }
 
 .foodbank-result-layout .hero-text,
+.foodbank-result-layout .map-side,
 .foodbank-result-layout .hero-map {
   min-width: 0;
 }
@@ -372,6 +373,120 @@ button.pill {
   color: var(--ink) !important;
   border: 1px solid rgba(23, 59, 44, 0.12);
   font-weight: 700;
+}
+
+.map-side {
+  display: grid;
+  gap: 1rem;
+  align-self: start;
+}
+
+.recommendation-panel {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 28px rgba(26, 26, 26, 0.06);
+}
+
+.recommendation-header {
+  margin-bottom: 0.8rem;
+}
+
+.recommendation-header .section-label {
+  margin-bottom: 0.2rem;
+}
+
+.recommendation-header h2 {
+  margin: 0;
+  color: var(--dark-green-dk);
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+}
+
+.recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.recommendation-card {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.9rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 20px rgba(26, 26, 26, 0.055);
+}
+
+.recommendation-card-header {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.recommendation-card-header strong {
+  color: var(--dark-green-dk);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.recommendation-rank {
+  width: fit-content;
+  padding: 0.15rem 0.45rem;
+  color: var(--dark-green-dk);
+  background: var(--cream-green);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.recommendation-distance,
+.recommendation-card p {
+  margin: 0;
+  color: var(--ink-mid);
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.recommendation-reason {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.recommendation-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.35rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.recommendation-pill-good {
+  color: #17422f;
+  background: #e6f4ea;
+  border: 1px solid #9bd3aa;
+}
+
+.recommendation-pill-warning {
+  color: #7a1f1f;
+  background: #fdeaea;
+  border: 1px solid #f0b1b1;
+}
+
+.recommendation-select {
+  justify-content: center;
+  width: 100%;
+  text-align: center;
 }
 
 .result-topbar {
@@ -599,6 +714,35 @@ button.pill {
   box-shadow: 0 8px 20px rgba(26, 26, 26, 0.055);
 }
 
+.item-card-match-excess {
+  background: #e6f4ea;
+  border-color: #69b37c;
+  box-shadow: 0 8px 20px rgba(31, 77, 58, 0.12);
+}
+
+.item-card-match-needs {
+  background: #fdeaea;
+  border-color: #e58d8d;
+  box-shadow: 0 8px 20px rgba(122, 31, 31, 0.1);
+}
+
+.item-match-badge {
+  margin-left: auto;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  color: var(--white);
+  background: var(--dark-green);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.item-card-match-needs .item-match-badge {
+  background: #a83232;
+}
+
 .item-card[hidden] {
   display: none;
 }
@@ -649,6 +793,10 @@ button.pill {
 
   .foodbank-result-layout #fb-map {
     min-height: 420px;
+  }
+
+  .recommendation-grid {
+    grid-template-columns: 1fr;
   }
 }
 
