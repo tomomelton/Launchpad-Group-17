@@ -110,7 +110,8 @@ button.pill {
 .hero-map {
   border-radius: var(--radius-lg);
   border: 2px solid var(--border);
-  aspect-ratio: 4/3;
+  aspect-ratio: 3/2;
+  min-height: 420px;
   overflow: hidden;
   background: var(--light-green);
   position: relative;
