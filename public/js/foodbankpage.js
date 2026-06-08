@@ -165,24 +165,24 @@ document.addEventListener("DOMContentLoaded", () => {
             const card = document.createElement("article");
             card.className = "recommendation-card";
 
-            const matchedText = recommendation.excessMatches.length > 0
-                ? recommendation.excessMatches.join(", ")
-                : "No exact requested-item match";
-
-            const neededText = recommendation.needsMatches.length > 0
-                ? recommendation.needsMatches.join(", ")
-                : "None of your requested items are listed as needed";
+            const hasQueriedItems = queriedItems.length > 0;
+            const matchedText = recommendation.excessMatches.join(", ");
+            const neededText = recommendation.needsMatches.join(", ");
+            const matchPills = hasQueriedItems ? `
+                <div class="recommendation-reason">
+                    ${recommendation.excessMatches.length > 0 ? `<span class="recommendation-pill recommendation-pill-good"><i class="fa-solid fa-circle-check"></i> ${matchedText}</span>` : ""}
+                    ${recommendation.needsMatches.length > 0 ? `<span class="recommendation-pill recommendation-pill-warning"><i class="fa-solid fa-triangle-exclamation"></i> Also needs: ${neededText}</span>` : ""}
+                </div>
+            ` : "";
 
             card.innerHTML = `
                 <div class="recommendation-card-header">
                     <span class="recommendation-rank">Alternative</span>
                     <strong>${recommendation.bank.name}</strong>
                 </div>
+                <p class="recommendation-postcode"><i class="fa-solid fa-envelope"></i> ${recommendation.bank.postcode || "Postcode unavailable"}</p>
                 <p class="recommendation-distance"><i class="fa-solid fa-route"></i> ${formatDistance(recommendation.distance)}</p>
-                <div class="recommendation-reason">
-                    <span class="recommendation-pill recommendation-pill-good"><i class="fa-solid fa-circle-check"></i> ${matchedText}</span>
-                    ${recommendation.needsMatches.length > 0 ? `<span class="recommendation-pill recommendation-pill-warning"><i class="fa-solid fa-triangle-exclamation"></i> Also needs: ${neededText}</span>` : ""}
-                </div>
+                ${matchPills}
                 <p>${recommendation.reason}</p>
                 <button type="button" class="btn btn-secondary btn-small recommendation-select">View this foodbank</button>
             `;
@@ -221,9 +221,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         const excessMatches = getMatchingQueries(normalisedBank.excess, queriedItems);
                         const needsMatches = getMatchingQueries(normalisedBank.needs, queriedItems);
                         const score = (excessMatches.length * 10000) - (needsMatches.length * 2500) - distance;
-                        const reason = excessMatches.length > 0
-                            ? `Recommended because it has ${excessMatches.length} of your requested item${excessMatches.length === 1 ? "" : "s"} in excess, while still considering walking distance.`
-                            : `Recommended as a nearby alternative. It does not list your requested items in excess, so distance is the main reason.`;
+                        const reason = queriedItems.length === 0
+                            ? "Another foodbank close to you."
+                            : excessMatches.length > 0
+                                ? `Recommended because it has ${excessMatches.length} of your requested item${excessMatches.length === 1 ? "" : "s"} in excess, while still considering walking distance.`
+                                : "Recommended as a nearby alternative.";
 
                         return { bank: normalisedBank, distance, excessMatches, needsMatches, score, reason };
                     })

@@ -357,6 +357,7 @@ button.pill {
 .foodbank-result-layout .hero-map {
   position: sticky;
   top: 84px;
+  z-index: 1;
   height: 520px;
   min-height: 520px;
   aspect-ratio: auto;
@@ -382,6 +383,8 @@ button.pill {
 }
 
 .recommendation-panel {
+  position: relative;
+  z-index: 3;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.62);
   border: 1px solid var(--border);
@@ -444,12 +447,26 @@ button.pill {
   text-transform: uppercase;
 }
 
+.recommendation-postcode,
 .recommendation-distance,
 .recommendation-card p {
   margin: 0;
   color: var(--ink-mid);
   font-size: 0.86rem;
   line-height: 1.35;
+}
+
+.recommendation-postcode,
+.recommendation-distance {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 800;
+}
+
+.recommendation-postcode i,
+.recommendation-distance i {
+  color: var(--dark-green);
 }
 
 .recommendation-reason {
