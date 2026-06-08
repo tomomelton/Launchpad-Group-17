@@ -46,7 +46,7 @@
         </header>
 
         <main>
-            <div class="hero">
+            <div class="hero foodbank-result-layout">
                 <div class="hero-text">
                     <div class="result-topbar">
                         <p class="section-label">Recommended food bank</p>
@@ -85,20 +85,37 @@
                         <div class="foodbank-actions" id="fb-actions"></div>
                     </section>
                     
-                    <h2>WHAT WE HAVE IN EXCESS</h2>
-                    <ul class="foodbank-list" id="excess-list">
-                        <li class="list-placeholder"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></li>
-                        <li class="list-placeholder"><p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></li>
-                        <li class="list-placeholder"><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></li>
-                    </ul>
+                    <section class="item-section" aria-labelledby="excess-heading">
+                        <div class="item-section-header">
+                            <h2 id="excess-heading">WHAT WE HAVE IN EXCESS</h2>
+                            <label class="item-filter">
+                                <span class="sr-only">Search excess items</span>
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="search" id="excess-filter" placeholder="Search excess items">
+                            </label>
+                        </div>
+                        <ul class="foodbank-list item-grid" id="excess-list">
+                            <li class="list-placeholder item-card"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></li>
+                            <li class="list-placeholder item-card"><p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></li>
+                            <li class="list-placeholder item-card"><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></li>
+                        </ul>
+                    </section>
             
-                    
-                    <h2>WHAT WE NEED</h2>
-                    <ul class="foodbank-list" id="needs-list">
-                        <li class="list-placeholder"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></li>
-                        <li class="list-placeholder"><p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></li>
-                        <li class="list-placeholder"><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></li>
-                    </ul>
+                    <section class="item-section" aria-labelledby="needs-heading">
+                        <div class="item-section-header">
+                            <h2 id="needs-heading">WHAT WE NEED</h2>
+                            <label class="item-filter">
+                                <span class="sr-only">Search needed items</span>
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="search" id="needs-filter" placeholder="Search needed items">
+                            </label>
+                        </div>
+                        <ul class="foodbank-list item-grid" id="needs-list">
+                            <li class="list-placeholder item-card"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></li>
+                            <li class="list-placeholder item-card"><p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></li>
+                            <li class="list-placeholder item-card"><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></li>
+                        </ul>
+                    </section>
                 </div>
 
                 <div class="hero-map">

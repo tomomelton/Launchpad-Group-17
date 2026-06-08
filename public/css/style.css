@@ -116,6 +116,7 @@ button.pill {
   background: var(--light-green);
   position: relative;
   z-index: 1;
+  box-shadow: 0 16px 34px rgba(26, 26, 26, 0.09);
 }
 
 .map-placeholder,
@@ -342,6 +343,31 @@ button.pill {
   margin: 5px
 }
 
+.foodbank-result-layout {
+  align-items: start;
+  gap: 2.5rem;
+}
+
+.foodbank-result-layout .hero-text,
+.foodbank-result-layout .hero-map {
+  min-width: 0;
+}
+
+.foodbank-result-layout .hero-map {
+  position: sticky;
+  top: 84px;
+  min-height: 520px;
+  aspect-ratio: auto;
+  align-self: start;
+}
+
+.foodbank-result-layout .hero-map > p {
+  background: rgba(255, 255, 255, 0.94) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(23, 59, 44, 0.12);
+  font-weight: 700;
+}
+
 .result-topbar {
   display: flex;
   align-items: center;
@@ -457,17 +483,134 @@ button.pill {
   margin-top: 0;
 }
 
-.hero-text > h2 {
+.item-section {
+  max-width: 520px;
   margin-top: 1.5rem;
-  margin-bottom: 0.65rem;
+}
+
+.item-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.item-section-header h2 {
+  margin: 0;
   color: var(--dark-green-dk);
   font-family: var(--font-heading);
   font-size: 1rem;
   letter-spacing: 0.08em;
 }
 
+.item-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 190px;
+  padding: 0.45rem 0.75rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--dark-green-dk);
+  box-shadow: 0 6px 16px rgba(26, 26, 26, 0.05);
+}
+
+.item-filter input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.item-filter input::placeholder {
+  color: var(--ink-light);
+}
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding-left: 0;
+  list-style: none;
+}
+
+.item-card {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 62px;
+  padding: 0.8rem 0.9rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 20px rgba(26, 26, 26, 0.055);
+}
+
+.item-card[hidden] {
+  display: none;
+}
+
+.item-card p {
+  max-width: none;
+  margin: 0;
+  color: var(--ink);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.item-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--cream-green);
+  color: var(--dark-green-dk);
+  flex-shrink: 0;
+}
+
+.item-card-empty {
+  grid-column: 1 / -1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 860px) {
+  .foodbank-result-layout .hero-map {
+    position: relative;
+    top: auto;
+    min-height: 420px;
+  }
+}
+
 @media (max-width: 640px) {
-  .stat-grid {
+  .stat-grid,
+  .item-grid {
     grid-template-columns: 1fr;
+  }
+
+  .item-section-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .item-filter {
+    width: 100%;
   }
 }

@@ -64,47 +64,57 @@ document.addEventListener("DOMContentLoaded", () => {
             element.remove();
         });
 
-        //####### Load Foodbank Excess #######
-        const excessList = document.getElementById("excess-list")
+        const renderItemGrid = (items, listElement, emptyMessage) => {
+            listElement.innerHTML = "";
 
-        if (data.excess.length === 0) {
-            let li = document.createElement("li");
-            let p = document.createElement("p");
-            p.textContent = "No items currently in excess";
-            li.appendChild(p);
-            excessList.appendChild(li);
-        } else {
-            data.excess.forEach(item => {
-                let p = document.createElement("p");
+            if (items.length === 0) {
+                const li = document.createElement("li");
+                li.className = "item-card item-card-empty";
+                li.dataset.item = emptyMessage.toLowerCase();
+
+                const p = document.createElement("p");
+                p.textContent = emptyMessage;
+                li.appendChild(p);
+                listElement.appendChild(li);
+                return;
+            }
+
+            items.forEach(item => {
+                const li = document.createElement("li");
+                li.className = "item-card";
+                li.dataset.item = item.toLowerCase();
+
+                const icon = document.createElement("span");
+                icon.className = "item-card-icon";
+                icon.innerHTML = '<i class="fa-solid fa-box-open"></i>';
+
+                const p = document.createElement("p");
                 p.textContent = item;
 
-                let li = document.createElement("li");
+                li.appendChild(icon);
                 li.appendChild(p);
-
-                excessList.appendChild(li);
+                listElement.appendChild(li);
             });
-        }
+        };
+
+        const attachItemFilter = (inputElement, listElement) => {
+            inputElement.addEventListener("input", () => {
+                const query = inputElement.value.trim().toLowerCase();
+                listElement.querySelectorAll(".item-card").forEach(card => {
+                    card.hidden = query && !card.dataset.item.includes(query);
+                });
+            });
+        };
+
+        //####### Load Foodbank Excess #######
+        const excessList = document.getElementById("excess-list");
+        renderItemGrid(data.excess, excessList, "No items currently in excess");
+        attachItemFilter(document.getElementById("excess-filter"), excessList);
 
         //####### Load Foodbank Needs #######
-        const needsList = document.getElementById("needs-list")
-
-        if (data.needs.length === 0) {
-            let li = document.createElement("li");
-            let p = document.createElement("p");
-            p.textContent = "No items currently needed";
-            li.appendChild(p);
-            needsList.appendChild(li);
-        } else {
-            data.needs.forEach(item => {
-                let p = document.createElement("p");
-                p.textContent = item;
-
-                let li = document.createElement("li");
-                li.appendChild(p);
-
-                needsList.appendChild(li);
-            });
-        }
+        const needsList = document.getElementById("needs-list");
+        renderItemGrid(data.needs, needsList, "No items currently needed");
+        attachItemFilter(document.getElementById("needs-filter"), needsList);
 
         //####### Load Map #######
         const foodbankLatLng = [data.latitude, data.longitude];
