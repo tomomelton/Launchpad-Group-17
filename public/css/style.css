@@ -113,12 +113,15 @@ button.pill {
   aspect-ratio: 4/3;
   overflow: hidden;
   background: var(--light-green);
+  position: relative;
+  z-index: 1;
 }
 
-.map-placeholder {
+.map-placeholder,
+.hero-map .leaflet-container {
   width: 100%;
   height: 100%;
-  background: var(--light-green);
+  z-index: 1;
 }
 
 /* sections */
@@ -227,17 +230,76 @@ button.pill {
   position: absolute;
   left: 0;
   top: calc(100% + 8px);
-  min-width: 200px;
-  padding: 0.4rem;
+  min-width: 280px;
+  max-width: min(320px, 90vw);
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 0.35rem 0;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: 0 10px 28px rgba(26, 26, 26, 0.12);
-  z-index: 20;
+  z-index: 1100;
 }
 
 .pill-menu.open {
   display: block;
+}
+
+.pill-collapse {
+  border-bottom: 1px solid var(--border);
+}
+
+.pill-collapse:last-child {
+  border-bottom: none;
+}
+
+.pill-collapse-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.pill-collapse-trigger:hover {
+  background: var(--cream-green);
+}
+
+.pill-collapse-chevron {
+  font-size: 0.65rem;
+  opacity: 0.75;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.pill-collapse.open .pill-collapse-chevron {
+  transform: rotate(180deg);
+}
+
+.pill-collapse-panel {
+  display: none;
+  padding: 0 0.35rem 0.4rem;
+}
+
+.pill-collapse.open .pill-collapse-panel {
+  display: block;
+}
+
+.pill-collapse-panel .pill-option {
+  font-weight: 500;
+  font-size: 0.8125rem;
+  padding: 0.45rem 0.65rem;
 }
 
 .pill-option {

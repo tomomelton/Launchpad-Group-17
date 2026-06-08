@@ -17,6 +17,9 @@
 
 
 async function initMap() {
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+
     const coords = await window.getCoords("Ladywood, Birmingham");
 
     const map = L.map('map', {
