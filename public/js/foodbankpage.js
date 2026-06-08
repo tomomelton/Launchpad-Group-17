@@ -40,28 +40,46 @@ document.addEventListener("DOMContentLoaded", () => {
         //####### Load Foodbank Excess #######
         const excessList = document.getElementById("excess-list")
 
-        data.excess.split(", ").forEach(item => {
-            let p = document.createElement("p");
-            p.textContent = item;
-
+        const excessItems = (data.excess || "").split(", ").filter(item => item.trim() !== "");
+        if (excessItems.length === 0) {
             let li = document.createElement("li");
+            let p = document.createElement("p");
+            p.textContent = "No items currently in excess";
             li.appendChild(p);
-
             excessList.appendChild(li);
-        })
+        } else {
+            excessItems.forEach(item => {
+                let p = document.createElement("p");
+                p.textContent = item;
+
+                let li = document.createElement("li");
+                li.appendChild(p);
+
+                excessList.appendChild(li);
+            });
+        }
 
         //####### Load Foodbank Needs #######
         const needsList = document.getElementById("needs-list")
 
-        data.needs.split(", ").forEach(item => {
-            let p = document.createElement("p");
-            p.textContent = item;
-
+        const needsItems = (data.needs || "").split(", ").filter(item => item.trim() !== "");
+        if (needsItems.length === 0) {
             let li = document.createElement("li");
+            let p = document.createElement("p");
+            p.textContent = "No items currently needed";
             li.appendChild(p);
-
             needsList.appendChild(li);
-        })
+        } else {
+            needsItems.forEach(item => {
+                let p = document.createElement("p");
+                p.textContent = item;
+
+                let li = document.createElement("li");
+                li.appendChild(p);
+
+                needsList.appendChild(li);
+            });
+        }
 
         //####### Load Map #######
         const map = L.map('fb-map', {
