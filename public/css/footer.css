@@ -38,6 +38,29 @@ footer {
   color: var(--cream-green);
 }
 
+.footer-accessibility-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.footer-accessibility-controls button {
+  min-height: 44px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 6px;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.55rem 0.8rem;
+}
+
+.footer-accessibility-controls button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
 .footer-partners {
   justify-content: center;
   margin-top: 1.5rem;
