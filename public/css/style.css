@@ -15,7 +15,7 @@
   margin-bottom: 1rem;
 }
 
-.hero h1 span {
+.hero h1 .hero-title-emphasis {
   color: var(--dark-green);
   font-style: italic;
 }
