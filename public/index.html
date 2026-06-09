@@ -19,26 +19,26 @@
       <nav>
         <a href="index.html" class="nav-logo">FoodBank<span>Finder</span></a>
 
-        <button class="nav-toggle" type="button">
-          <i class="fa-solid fa-bars"></i>
+        <button class="nav-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-navigation" data-i18n-aria="open_nav">
+          <i class="fa-solid fa-bars" aria-hidden="true"></i>
         </button>
 
-        <div class="nav-menu">
+        <div class="nav-menu" id="primary-navigation">
           <ul class="nav-links">
-            <li><a href="about.html">About us</a></li>
-            <li><a href="foodbanks.html">Foodbank</a></li>
+            <li><a href="about.html" data-i18n="nav_about">About us</a></li>
+            <li><a href="foodbanks.html" data-i18n="nav_foodbank">Foodbank</a></li>
           </ul>
 
           <div class="lang-dropdown">
-            <button class="nav-lang" type="button" onclick="document.querySelector('.lang-menu').classList.toggle('open')">
-              English <i class="fa-solid fa-chevron-down"></i>
+            <button class="nav-lang" type="button" aria-label="Choose language" data-i18n-aria="choose_language" onclick="document.querySelector('.lang-menu').classList.toggle('open')">
+              <span data-language-label>English</span> <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
             </button>
             <div class="lang-menu">
-              <a href="#">English</a>
-              <a href="#">Français</a>
-              <a href="#">Español</a>
-              <a href="#">Polski</a>
-              <a href="#">Română</a>
+              <a href="#" onclick="setLanguage('en');return false;">English</a>
+              <a href="#" onclick="setLanguage('fr');return false;">Français</a>
+              <a href="#" onclick="setLanguage('es');return false;">Español</a>
+              <a href="#" onclick="setLanguage('pl');return false;">Polski</a>
+              <a href="#" onclick="setLanguage('ro');return false;">Română</a>
             </div>
           </div>
         </div>
@@ -48,12 +48,12 @@
     <main>
       <div class="hero">
         <div class="hero-text">
-          <h1>Find a <span>food bank</span> near you</h1>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <h1><span data-i18n="hero_title_prefix">Find a</span> <span data-i18n="hero_title_emphasis">food bank</span> <span data-i18n="hero_title_suffix">near you</span></h1>
+          <p data-i18n="hero_intro">Search by postcode or address to find nearby foodbank support, see walking distance, and check whether selected food items are listed as available or needed.</p>
 
           <div class="search-box">
-            <input type="text" placeholder="Enter your address" id="address-field">
-            <button type="button" id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <input type="text" placeholder="Enter your address" id="address-field" data-i18n-placeholder="address_placeholder">
+            <button type="button" id="search-button" aria-label="Search for nearby foodbanks" data-i18n-aria="search_button"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
           </div>
 
           <div id="selected-pills" class="selected-pills" hidden></div>
@@ -61,7 +61,7 @@
           <div class="filter-pills">
             <div class="pill-dropdown food-dropdown">
               <button type="button" class="pill pill-filled pill-trigger" aria-haspopup="true" aria-expanded="false">
-                Food
+                <span data-i18n="food_filter">Food</span>
                 <i class="fa-solid fa-chevron-down pill-chevron" aria-hidden="true"></i>
               </button>
 
@@ -79,11 +79,11 @@
         <div class="container">
           <div class="left-inner">
             <div>
-              <p class="section-label">Learn more</p>
-              <h2>About Us</h2>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-              <a href="about.html" class="btn">Read More</a>
+              <p class="section-label" data-i18n="learn_more_label">Learn more</p>
+              <h2 data-i18n="about_heading_home">About Us</h2>
+              <p data-i18n="about_text_1">FoodBankFinder is a student prototype designed to reduce confusion when people need to locate food support. It combines location, item information, and walking guidance in one simple place.</p>
+              <p data-i18n="about_text_2">Foodbank details can change quickly, so the app is best used as a starting point alongside advice from foodbanks, referrers, or local support services.</p>
+              <a href="about.html" class="btn" data-i18n="read_more">Read More</a>
             </div>
             <div class="left-img">
               <img src="assets/team.jpg" alt="Food bank volunteers">
@@ -99,11 +99,11 @@
               <img src="assets/image-2.jpg" alt="Food bank supplies">
             </div>
             <div>
-              <p class="section-label">Network</p>
-              <h2>Foodbanks</h2>
-              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-              <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
-              <a href="#" class="btn">Learn More</a>
+              <p class="section-label" data-i18n="network_label">Network</p>
+              <h2 data-i18n="foodbanks_heading_home">Foodbanks</h2>
+              <p data-i18n="foodbanks_text_1">Browse foodbanks by distance and item match, then compare alternatives if the first result is not suitable.</p>
+              <p data-i18n="foodbanks_text_2">The prototype highlights reported excess items and needed items so users and donors can make more informed decisions before travelling.</p>
+              <a href="foodbanks.html" class="btn" data-i18n="learn_more_label">Learn More</a>
             </div>
           </div>
         </div>
@@ -114,13 +114,17 @@
       <div class="footer-inner">
         <span class="footer-logo">FoodBankFinder</span>
         <ul class="footer-links">
-          <li><a href="#">About</a></li>
-          <li><a href="#">Foodbanks</a></li>
-          <li><a href="register.html">Register</a></li>
-          <li><a href="#">Privacy</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#" data-i18n="footer_about">About</a></li>
+          <li><a href="#" data-i18n="footer_foodbanks">Foodbanks</a></li>
+          <li><a href="register.html" data-i18n="footer_register">Register</a></li>
+          <li><a href="#" data-i18n="footer_privacy">Privacy</a></li>
+          <li><a href="#" data-i18n="footer_contact">Contact</a></li>
         </ul>
         <span>© 2026 FoodBankFinder</span>
+        <div class="footer-accessibility-controls">
+          <button type="button" data-accessibility-toggle="high-contrast" aria-label="Toggle high contrast display" data-i18n-aria="toggle_high_contrast" data-i18n="toggle_high_contrast">Toggle high contrast</button>
+          <button type="button" data-accessibility-toggle="large-text" aria-label="Toggle large text display" data-i18n-aria="toggle_large_text" data-i18n="toggle_large_text">Toggle large text</button>
+        </div>
       </div>
 
       <div class="footer-inner footer-partners">
@@ -131,6 +135,7 @@
     </footer>
 
     <script src="js/i18n.js"></script>
+    <script src="js/accessibility.js"></script>
     <script src="js/nav.js"></script>
     <script src="js/dropdown.js"></script>
     <script src="js/search.js"></script>

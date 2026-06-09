@@ -45,6 +45,20 @@ body {
   flex-direction: column;
 }
 
+body.high-contrast {
+  --dark-green: #1a3c2b;
+  --sage-green: #2d5a3f;
+  --light-green: #e8f5e9;
+  --cream-green: #ffffff;
+  --dark-green-dk: #0f2a1e;
+  --ink: #000000;
+  --ink-mid: #1a1a1a;
+}
+
+body.large-text {
+  font-size: 1.15rem;
+}
+
 main {
   flex: 1;
 }
