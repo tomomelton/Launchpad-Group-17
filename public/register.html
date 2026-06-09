@@ -11,6 +11,7 @@
         <link rel="stylesheet" type='text/css' href="css/nav.css">
         <link rel="stylesheet" type='text/css' href="css/about.css">
         <link rel="stylesheet" type='text/css' href="css/mobile.css">
+        <link rel="stylesheet" type='text/css' href="css/register.css">
     </head>
 
     <body>
@@ -44,38 +45,44 @@
             </nav>
         </header>
 
-        <main class="about-page">
-            <div class="container">
-                <h1 class="about-heading" data-i18n="about_page_heading">Who are we?</h1>
+        <main>
+            <h1 class="sign-heading">Register your Foodbank</h1>
 
-                <div class="about-row">
-                    <div class="about-cell about-content">
-                        <h2 data-i18n="mission_heading">Our mission</h2>
-                        <p data-i18n="mission_text">We are building a student prototype that helps people find nearby foodbank support and understand basic travel and item information before they set off.</p>
-                    </div>
-                    <div class="about-cell about-image">
-                        <img src="assets/team-2.jpg" alt="Food bank volunteers">
-                    </div>
-                    <div class="about-cell about-content">
-                        <h2 data-i18n="community_heading">Our community</h2>
-                        <p data-i18n="community_text">Food support can be difficult to navigate on a phone, especially when people need quick answers about distance, location, and whether a foodbank lists certain items.</p>
-                    </div>
-                </div>
+            <form action="#" method="post" id="myForm" class="inputField">
 
-                <div class="about-row">
-                    <div class="about-cell about-image">
-                        <img src="assets/image-3.jpg" alt="Food bank supplies">
+                <fieldset>
+                    <div class="input-box">
+                        <label for="Name" class="input-label">Name:</label>
+                        <input type="text" placeholder="Enter Foodbank Name" id="Name" name="FoodBankName" required>
                     </div>
-                    <div class="about-cell about-content">
-                        <h2 data-i18n="what_we_do_heading">What we do</h2>
-                        <p data-i18n="what_we_do_text_1">FoodBankFinder combines postcode search, walking guidance, item lists, and alternative recommendations in one mobile-friendly page.</p>
-                        <p data-i18n="what_we_do_text_2">The app is a prototype, so foodbank information should be checked with the foodbank or a referrer before travelling.</p>
+
+                    <div class="input-box">
+                        <label for="Email" class="input-label">Email:</label>
+                        <input type="email" placeholder="Enter Email" id="Email" name="Email" required>
                     </div>
-                    <div class="about-cell about-image">
-                        <img src="assets/image-4.jpg" alt="People receiving food support">
+
+                    <div class="input-box">
+                        <label for="Email" class="input-label">Password:</label>
+                        <input type="password" placeholder="Enter Password" id="Password" name="Password" required> 
                     </div>
-                </div>
-            </div>
+
+                    <div class="input-box">
+                        <label for="Email" class="input-label">Confirm Password:</label>
+                        <input type="password" placeholder="Confirm Password" id="Confirm" name="ConfirmPassword" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="Email" class="input-label">Postcode:</label>
+                        <input type="text" placeholder="Enter Postcode" id="Postcode" name="Postcode" required>
+                    </div>
+
+                    <p class="confirmMessage"> All fields are required.</p>
+            
+                    <div class="register-btn">
+                        <button type="submit" class="btn" value="sendMessage">Register!</button>
+                    </div>
+                </fieldset>
+            </form>
         </main>
 
         <footer>
@@ -100,6 +107,7 @@
 
         <script src="js/i18n.js"></script>
         <script src="js/nav.js"></script>
-
+        <script src="js/register.js"></script>
+        
     </body>
 </html>
