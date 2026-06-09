@@ -3,8 +3,8 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: var(--sage-green);
-  border-bottom: 2px solid var(--dark-green);
+  background: var(--dark-green);
+  border-bottom: 2px solid var(--sage-green);
 }
 
 nav {
@@ -31,7 +31,7 @@ nav {
 
 .nav-toggle {
   display: none;
-  background: var(--dark-green);
+  background: var(--sage-green);
   color: var(--white);
   border: none;
   width: 44px;
@@ -65,7 +65,7 @@ nav {
 }
 
 .nav-lang {
-  background: var(--dark-green);
+  background: var(--sage-green);
   color: var(--white);
   border: 1px solid rgba(255, 255, 255, 0.35);
   padding: 0.35rem 0.8rem;
