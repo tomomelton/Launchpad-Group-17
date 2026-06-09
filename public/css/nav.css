@@ -53,15 +53,16 @@ nav {
 }
 
 .nav-links a {
-  color: var(--white);
+  color: var(--dark-green-dk);
   text-decoration: none;
   font-size: 0.9rem;
   padding: 0.4rem 0.9rem;
   border-radius: 6px;
+  font-weight: 600;
 }
 
 .nav-links a:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.35);
 }
 
 .nav-lang {
