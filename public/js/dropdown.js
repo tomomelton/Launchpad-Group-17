@@ -110,6 +110,63 @@ function buildFoodMenu(data) {
     if (!Array.isArray(items) || items.length === 0) continue;
     menu.appendChild(buildCollapseSection(categoryKey, items));
   }
+
+  attachCheckboxListeners();
+  updateSelectedPills();
+}
+
+function attachCheckboxListeners() {
+  var checkboxes = document.querySelectorAll('.food-dropdown input[type="checkbox"]');
+
+  for (var i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].addEventListener('change', updateSelectedPills);
+  }
+}
+
+function updateSelectedPills() {
+  var container = document.getElementById('selected-pills');
+  if (!container) return;
+
+  var checked = document.querySelectorAll('.food-dropdown input[type="checkbox"]:checked');
+  container.innerHTML = '';
+
+  if (checked.length === 0) {
+    container.hidden = true;
+    return;
+  }
+
+  container.hidden = false;
+
+  for (var i = 0; i < checked.length; i++) {
+    var input = checked[i];
+    var label = input.closest('label');
+    var span = label ? label.querySelector('span') : null;
+    var text = span ? span.textContent.trim() : input.value;
+
+    var pill = document.createElement('button');
+    pill.type = 'button';
+    pill.className = 'selected-pill';
+    pill.setAttribute('aria-label', 'Remove ' + text);
+
+    var textEl = document.createElement('span');
+    textEl.textContent = text;
+
+    var icon = document.createElement('i');
+    icon.className = 'fa-solid fa-xmark';
+    icon.setAttribute('aria-hidden', 'true');
+
+    pill.appendChild(textEl);
+    pill.appendChild(icon);
+
+    (function (checkbox) {
+      pill.addEventListener('click', function () {
+        checkbox.checked = false;
+        updateSelectedPills();
+      });
+    })(input);
+
+    container.appendChild(pill);
+  }
 }
 
 function getSelectedPreferences() {
@@ -129,12 +186,8 @@ window.getSelectedPreferences = getSelectedPreferences;
 
 fetch('/api/food-bank-items')
   .then(function (res) {
-    if (!res.ok) throw new Error('HTTP ' + res.status);
     return res.json();
   })
   .then(function (data) {
     buildFoodMenu(data);
-  })
-  .catch(function (error) {
-    console.error('Could not load food items:', error);
   });

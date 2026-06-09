@@ -54,6 +54,44 @@
   background: var(--dark-green-dk);
 }
 
+.selected-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+}
+
+.selected-pills[hidden] {
+  display: none;
+}
+
+.selected-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  border: none;
+  border-radius: 999px;
+  background: #e4e4e4;
+  color: var(--ink-mid);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.selected-pill:hover {
+  background: #d0d0d0;
+  color: var(--ink);
+}
+
+.selected-pill i {
+  font-size: 0.6rem;
+  opacity: 0.65;
+}
+
 .filter-pills {
   display: flex;
   gap: 0.5rem;

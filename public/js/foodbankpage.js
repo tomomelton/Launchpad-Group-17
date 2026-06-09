@@ -17,11 +17,12 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    renderSearchStatus();
+
     const data = JSON.parse(localStorage.getItem("selectedFoodbank"));
 
     if (data) {
 
-        // Normalise needs/excess to arrays (backend may send strings or arrays)
         const toArray = (val) => {
             if (Array.isArray(val)) return val;
             if (typeof val === 'string' && val.trim()) return val.split(', ');
@@ -30,9 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         data.excess = toArray(data.excess);
         data.needs = toArray(data.needs);
 
-        //####### Load Main Foodbank Details #######
-        document.getElementById("fb-header").textContent =
-            data.name;
+        document.getElementById("fb-header").textContent = data.name;
 
         const addressParts = data.address.split(", ")
         document.getElementById("fb-address").innerHTML =
@@ -41,12 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("fb-postcode").innerHTML =
             "<b>Postcode: </b>" + data.postcode;
 
-        //####### Clear Placeholder Elements #######
         document.querySelectorAll(".list-placeholder").forEach(element => {
             element.remove();
         });
 
-        //####### Load Foodbank Excess #######
         const excessList = document.getElementById("excess-list")
 
         if (data.excess.length === 0) {
@@ -67,7 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        //####### Load Foodbank Needs #######
         const needsList = document.getElementById("needs-list")
 
         if (data.needs.length === 0) {
@@ -88,14 +84,13 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        //####### Load Map #######
         const map = L.map('fb-map', {
-        center: [
-            data.latitude,
-            data.longitude
-        ],
-        zoom: 12
-        }); 
+            center: [
+                data.latitude,
+                data.longitude
+            ],
+            zoom: 12
+        });
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -111,8 +106,35 @@ document.addEventListener("DOMContentLoaded", () => {
                 <style>#adrs{font-size: x-small}</style>`
             )
             .openPopup();
-        
-        
-}
+    }
 
 })
+
+function renderSearchStatus() {
+    const statusEl = document.getElementById("search-status");
+    const textEl = document.getElementById("search-status-text");
+    if (!statusEl || !textEl) return;
+
+    const raw = localStorage.getItem("searchQuery");
+    if (!raw) return;
+
+    const query = JSON.parse(raw);
+    if (!query.address) return;
+
+    let message = "Showing the best match for <strong>" + escapeHtml(query.address) + "</strong>";
+
+    if (query.preferences && query.preferences.length > 0) {
+        message += ", looking for: <strong>" + escapeHtml(query.preferences.join(", ")) + "</strong>";
+    }
+
+    message += ".";
+
+    textEl.innerHTML = message;
+    statusEl.hidden = false;
+}
+
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}

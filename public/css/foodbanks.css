@@ -1,0 +1,109 @@
+.foodbank-page {
+  padding-bottom: 2rem;
+}
+
+.search-status {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1.25rem var(--page-padding) 0;
+}
+
+.search-status[hidden] {
+  display: none;
+}
+
+.search-status-inner {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--dark-green);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.15rem;
+}
+
+.search-status-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--dark-green);
+  margin-bottom: 0.35rem;
+}
+
+.search-status-text {
+  font-size: 0.95rem;
+  color: var(--ink-mid);
+  line-height: 1.5;
+}
+
+.search-status-text strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.foodbank-hero {
+  align-items: start;
+  padding-top: 1.5rem;
+}
+
+.foodbank-hero .hero-map {
+  aspect-ratio: auto;
+  min-height: 480px;
+}
+
+.foodbank-hero .hero-map .map-placeholder,
+.foodbank-hero .hero-map .leaflet-container {
+  min-height: 480px;
+}
+
+.foodbank-hero .hero-text h1 {
+  margin-bottom: 0.75rem;
+}
+
+.fb-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.fb-section:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.fb-section h2 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dark-green);
+  margin-bottom: 0.85rem;
+}
+
+.foodbank-details .foodbank-list {
+  padding-left: 0;
+  list-style: none;
+}
+
+.foodbank-details .foodbank-list li p {
+  margin: 0.35rem 0;
+  color: var(--ink-mid);
+}
+
+.foodbank-list li p {
+  margin: 0.4rem 0;
+  color: var(--ink-mid);
+}
+
+.foodbank-list li p.tag {
+  color: var(--ink);
+}
+
+@media (max-width: 768px) {
+  .foodbank-hero .hero-map,
+  .foodbank-hero .hero-map .map-placeholder,
+  .foodbank-hero .hero-map .leaflet-container {
+    min-height: 300px;
+  }
+}

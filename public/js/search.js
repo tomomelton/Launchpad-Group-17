@@ -32,7 +32,9 @@ button.addEventListener("click", async () => {
 
     try {
         const coords = await getCoordinates(address);
-        const preferences = window.getSelectedPreferences ? [] : window.getSelectedPreferences;
+        const preferences = window.getSelectedPreferences
+            ? window.getSelectedPreferences()
+            : [];
 
         const response = await fetch("/api/best-foodbanks", {
             method: "POST",
@@ -56,6 +58,10 @@ button.addEventListener("click", async () => {
         }
 
         localStorage.setItem("selectedFoodbank", JSON.stringify(data));
+        localStorage.setItem("searchQuery", JSON.stringify({
+            address: address,
+            preferences: preferences
+        }));
         window.location.href = "foodbanks.html";
     }
     catch (err) {
